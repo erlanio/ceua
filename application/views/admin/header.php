@@ -44,6 +44,7 @@
     <!-- Main File-->
     <script src="<?php echo base_url('assets/js/'); ?>front.js"></script>
     <script src="<?php echo base_url('assets/js/'); ?>validacoes.js"></script>
+    <script src="<?php echo base_url('assets/js/'); ?>jquery.form.js"></script>
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
   </head>
   <body>

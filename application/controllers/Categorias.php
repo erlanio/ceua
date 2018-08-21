@@ -21,12 +21,26 @@ class Categorias extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
+        $this->load->model('Model_Categoria', 'categoria');
     }
 
     public function index() {
         $this->load->view('admin/header');
         $this->load->view('admin/menu');
         $this->load->view('admin/categoria');
+    }
+
+    public function salvar() {
+        //$data['nome_categoria'] = $this->input->post('nome');
+        //$data['desc_categoria'] = $this->input->post('desc');
+        //$data['img_categoria'] = "";
+        //$this->categoria->salvar($data);
+        
+        echo $this->input->post('nome');;
+    }
+    
+    public function salvarImagem() {
+        var_dump($_FILES['img-categoria']);
     }
 
 }
