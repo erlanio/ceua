@@ -4,7 +4,7 @@
             <h3>Administrar Categorias</h3>
         </div>
 
-
+        <button id="atualizar-tabela-categorias" hidden="">atualizar</button>
         <div class="d-flex align-items-md-stretch">
             <button class="btn btn-primary col-md-3" data-toggle="modal" data-target="#cadastro-categoria"><i class="fa fa-plus"></i> Nova Categoria</button>
         </div>
@@ -15,28 +15,18 @@
             </div>
             <div class="card-body">
                 <div class="align-items-md-stretch">
-                    <table id="tabela-categorias">
+                    <table id="tabela-categorias" class="table-hover">
                         <thead>
                             <tr>
-                                <th>#ID</th>
-                                <th>Imagem</th>
-                                <th>Categoria</th>
-                                <th>Descrição</th>
-                                <th>Opções</th>
+                                <th id="id">#ID</th>
+                                <th id="imagem">Imagem</th>
+                                <th id="categoria">Categoria</th>
+                                <th id="descricao">Descrição</th>
+                                <th id="opcoes">Opções</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <th>1</th>
-                                <td>imagem...</td>
-                                <td>Bebidas</td>
-                                <td>Coca-Cola, Guaraná, Fanta</td>
-                                <td>
-                                    <button class="btn btn-info" data-toggle="modal" data-target="#editar-categoria"><i class="fa fa-edit"></i> Alterar</button>
-                                    <button class="btn btn-danger"><i class="fa fa-close"></i> Excluir</button>
-                                </td>
-                            </tr>                            
-                        </tbody>
+                        
+                      
                     </table>
                 </div>
             </div>
@@ -56,27 +46,27 @@
                 <p>Cadastrar Categoria</p>
 
                 <div id="retorno-salvar-categoria"></div>
+                <form method="post" action="<?php echo base_url('Categorias/salvar'); ?>" id="form-categoria" onsubmit="return false" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Nome Categoria</label>
+                        <input type="text" placeholder="Nome da Categoria" id="nome-categoria" name="nome-categoria" class="form-control">
+                    </div>
+                    <div class="form-group">       
+                        <label>Descrição da Categoria</label>
+                        <input type="text" placeholder="Descrição da Categoria" id="desc-categoria" name="desc-categoria" class="form-control">
+                    </div>
 
-                <div class="form-group">
-                    <label>Nome Categoria</label>
-                    <input type="text" placeholder="Nome da Categoria" id="nome-categoria" class="form-control">
-                </div>
-                <div class="form-group">       
-                    <label>Descrição da Categoria</label>
-                    <input type="text" placeholder="Descrição da Categoria" id="desc-categoria" class="form-control">
-                </div>
+                    <div class="form-group">   
 
-                <div class="form-group">   
-                    <form method="post" action="<?php echo base_url('Categorias/salvarImagem'); ?>" id="form-categoria" onsubmit="return false" enctype="multipart/form-data">
                         <div id="retorno-imagem-categoria"></div>
                         <label>Imagem da Categoria</label>
                         <input type="file" id="img-categoria" name="img-categoria" placeholder="Descrição da Categoria" id="imagem-categoria" class="form-control">
-                    </form>
-                </div>
-                <div class="form-group">       
-                    <input type="submit" value="Salvar Categoria" id="btn-salvar-categoria" class="btn btn-primary col-md-12 disabled">
-                </div>
 
+                    </div>
+                    <div class="form-group">       
+                        <input type="submit" value="Salvar Categoria" id="btn-salvar-categoria" class="btn btn-primary col-md-12" disabled="">
+                    </div>
+                </form>
 
             </div>
             <div class="modal-footer">
@@ -97,25 +87,29 @@
                 <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <p>Editar Categoria</p>
-                <form>
-                    <div class="form-group">
-                        <label>Nome Categoria</label>
-                        <input type="text" placeholder="Nome da Categoria" class="form-control">
-                    </div>
-                    <div class="form-group">       
-                        <label>Descrição da Categoria</label>
-                        <input type="text" placeholder="Descrição da Categoria" class="form-control">
-                    </div>
+                <p>Editar Categoria</p>               
+                <div class="form-group">
+                    <label>Nome Categoria</label>
+                    <input type="text" placeholder="Nome da Categoria" id="nome-categoria-edit" class="form-control">
+                </div>
+                <div class="form-group">       
+                    <label>Descrição da Categoria</label>
+                    <input type="text" placeholder="Descrição da Categoria" id="desc-categoria-edit" class="form-control">
+                </div>
 
-                    <div class="form-group">       
-                        <label>Imagem da Categoria</label>
-                        <input type="file" placeholder="Descrição da Categoria" class="form-control">
-                    </div>
-                    <div class="form-group">       
-                        <input type="submit" value="Salvar Alterações" class="btn btn-info col-md-12">
-                    </div>
-                </form>
+                <div class="form-group">  
+                    Imagem Atual<br>
+                    <img src="" id="img-edit" class="img-responsive col-md-2">
+                    <input type="file" id="img-categoria-edit">
+
+                </div>
+
+
+
+                <div class="form-group">       
+                    <input type="submit" value="Salvar Alterações" class="btn btn-info col-md-12">
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-danger">Fechar</button>                
