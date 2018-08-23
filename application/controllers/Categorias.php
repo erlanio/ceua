@@ -40,20 +40,19 @@ class Categorias extends CI_Controller {
         $start = intval($this->input->get("start"));
         $length = intval($this->input->get("length"));
 
-    
+
         $data = array();
 
         foreach ($data2['categorias'] as $r) {
-                $url = base_url('assets/img/categorias/'.$r->img_categoria);
+            $url = base_url('assets/img/categorias/' . $r->img_categoria);
             $data[] = array(
                 $r->id_categoria,
-                $r->img = "<img src='$url' class='img-responsive col-md-3'>",
                 $r->nome_categoria,
                 $r->desc_categoria,
-                $r->opcoes = "<button class='btn btn-info' data-toggle='modal' data-target='#editar-categoria' 
+                $r->opcoes = "<div class='col-md-12'><button class='btn btn-info col-md-5' data-toggle='modal' data-target='#editar-categoria' 
                     onclick=\"alterarCategoria('$r->id_categoria');\"><i class='fa fa-edit'></i> Alterar</button>
-                    <button class='btn btn-danger'
-                    onclick=\"excluirCategoria('$r->id_categoria');\"><i class='fa fa-close'></i> Excluir</button>
+                    <button class='btn btn-danger col-md-5'
+                    onclick=\"excluirCategoria('$r->id_categoria', '$r->img_categoria');\"><i class='fa fa-close'></i> Excluir</button></div>
 ",
             );
         }
@@ -70,6 +69,16 @@ class Categorias extends CI_Controller {
 
     public function deletar() {
         $id = $this->input->post('id');
+        $img = $this->input->post('img');
+        echo $img;
+
+        define('EXT', '.' . pathinfo(__FILE__, PATHINFO_EXTENSION));
+        //   define('FCPATH', __FILE__);
+        // define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
+        define('PUBPATH', str_replace(SELF, '', FCPATH)); // added
+
+        $filestring = PUBPATH . 'assets/img/categorias/'.$img;
+        unlink($filestring);
         $this->categoria->deletar($id);
     }
 
@@ -77,6 +86,28 @@ class Categorias extends CI_Controller {
         $id = $this->input->post('id');
         $data['categoria'] = $this->categoria->buscarCategoria($id);
         echo json_encode($data['categoria']);
+    }
+
+    public function update() {
+        $id_categoria = $this->input->post('id-categoria-edit');
+        $nome_categoria = $this->input->post('nome-categoria-edit');
+        $desc_categoria = $this->input->post('desc-categoria-edit');
+        $data['nome_categoria'] = $nome_categoria;
+        $data['desc_categoria'] = $desc_categoria;
+        if (isset($_FILES["img-categoria-edit"])) {
+
+            $pasta = "assets/img/categorias/";
+            $tipoArquivos = array(".jpg", ".jpeg", ".gif", ".png", ".bmp");
+            $input = "img-categoria-edit";
+            $campo = "img_categoria";
+            $id_imagem = "img-categoria-edit";
+
+
+            $this->inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_categoria, $desc_categoria, $id_categoria);
+        } else {
+            echo "<div class='alert alert-success'>Dados alterados com sucesso!</div>";
+            $this->categoria->update($data, $id_categoria);
+        }
     }
 
     public function salvar() {
@@ -91,8 +122,8 @@ class Categorias extends CI_Controller {
         $this->inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_categoria, $desc_categoria);
     }
 
-    public function inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_categoria, $desc_categoria) {
-        
+    public function inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_categoria, $desc_categoria, $id_categoria = null) {
+
         $pasta = $pasta;
         /* formatos de imagem permitidos */
         $permitidos = $tipoArquivos;
@@ -124,9 +155,12 @@ class Categorias extends CI_Controller {
                     $data["$campo"] = $nome_atual;
                     $data["nome_categoria"] = $nome_categoria;
                     $data["desc_categoria"] = $desc_categoria;
-
-
-                    $this->categoria->salvar($data);
+                    if ($id_categoria == null) {
+                        $this->categoria->salvar($data);
+                    } else {
+                        echo 'update';
+                        $this->categoria->update($data, $id_categoria);
+                    }
                 } else {
                     echo "Falha ao enviar";
                 }

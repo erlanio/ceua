@@ -105,24 +105,7 @@ $(document).ready(function () {
             $('#desc-categoria').val("");
             $('#img-categoria').val("");
 
-            $.notify({
-                title: "<strong>Atenção: </strong>",
-                icon: 'glyphicon glyphicon-warning-sign',
-                message: "Salvo com sucesso!"
-            }, {
-                type: 'danger',
-                animate: {
-                    enter: 'animated rollIn',
-                    exit: 'animated rollOut'
-                },
-                placement: {
-                    from: "bottom",
-                    align: "right"
-                },
-                offset: 50,
-                spacing: 10,
-                z_index: 1031,
-            });
+            notify("Salvo com sucesso!", "success");
         }
 
     })
@@ -130,9 +113,6 @@ $(document).ready(function () {
 
 });
 
-function carregarTabelaCategorias() {
-
-}
 
 function alterarCategoria($id) {
     $.ajax({
@@ -144,19 +124,22 @@ function alterarCategoria($id) {
         })
 
     }).done(function (data) {
+        console.log(data);
         var obj = JSON.parse(data);
         obj.forEach(function (o, index) {
             $('#nome-categoria-edit').val(o.nome_categoria);
             $('#desc-categoria-edit').val(o.desc_categoria);
+            $('#id-categoria-edit').val(o.id_categoria);
             $imagem = $BASE_URL + "assets/img/categorias/" + o.img_categoria;
             $('#img-edit').attr('src', $imagem);
+
 
         });
 
     });
 }
 
-function excluirCategoria($id) {
+function excluirCategoria($id, $img) {
 
     bootbox.confirm({
         message: "Tem certeza que deseja deletar esta categoria?",
@@ -178,14 +161,48 @@ function excluirCategoria($id) {
                     type: 'POST',
                     dataType: 'html',
                     data: ({
-                        'id': $id
+                        'id': $id,
+                        'img': $img
                     })
 
                 }).done(function (data) {
+                    notify("Excluido com sucesso!", "danger");
                     $('#atualizar-tabela-categorias').click();
                 });
             }
         }
     });
 
+}
+
+
+function salvarAlteracoesCategoria() {
+    $('#form-categoria-update').ajaxForm({
+        target: '#retorno-edit-categorias' // o callback serÃ¡ no elemento com o id #visualizar
+    }).submit();
+    notify("Dados alterados com sucesso!", "info");
+    $('#atualizar-tabela-categorias').click();
+}
+
+
+function notify($mensagem, $tipo) {
+    $.notify({
+        title: "<strong>Atenção: </strong>",
+        icon: 'glyphicon glyphicon-warning-sign',
+        message: $mensagem,
+        position: "top"
+    }, {
+        type: $tipo,
+        animate: {
+            enter: 'animated rollIn',
+            exit: 'animated rollOut'
+        },
+        placement: {
+            from: "bottom",
+            align: "right"
+        },
+        offset: 50,
+        spacing: 10,
+        z_index: 9999,
+    });
 }

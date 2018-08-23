@@ -13,20 +13,19 @@
             <div class="card-header">
                 <h4>Categorias</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body col-md-12">
                 <div class="align-items-md-stretch">
-                    <table id="tabela-categorias" class="table-hover">
+                    <table id="tabela-categorias" class="table-hover table-action tabela-categorias">
                         <thead>
                             <tr>
-                                <th id="id">#ID</th>
-                                <th id="imagem">Imagem</th>
-                                <th id="categoria">Categoria</th>
-                                <th id="descricao">Descrição</th>
-                                <th id="opcoes">Opções</th>
+                                <th>#ID</th>                                
+                                <th>Categoria</th>
+                                <th>Descrição</th>
+                                <th>Opções</th>
                             </tr>
                         </thead>
-                        
-                      
+
+
                     </table>
                 </div>
             </div>
@@ -87,29 +86,32 @@
                 <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <p>Editar Categoria</p>               
-                <div class="form-group">
-                    <label>Nome Categoria</label>
-                    <input type="text" placeholder="Nome da Categoria" id="nome-categoria-edit" class="form-control">
-                </div>
-                <div class="form-group">       
-                    <label>Descrição da Categoria</label>
-                    <input type="text" placeholder="Descrição da Categoria" id="desc-categoria-edit" class="form-control">
-                </div>
+                <p>Editar Categoria</p>  
+                
+                <div id="retorno-edit-categorias"></div>
+                <form method="post" action="<?php echo base_url('Categorias/update'); ?>" id="form-categoria-update" onsubmit="return false" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Nome Categoria</label>
+                        <input type="text" placeholder="Nome da Categoria" id="nome-categoria-edit" name="nome-categoria-edit" class="form-control">
+                    </div>
+                    <div class="form-group">       
+                        <label>Descrição da Categoria</label>
+                        <input type="text" placeholder="Descrição da Categoria" id="desc-categoria-edit" name="desc-categoria-edit" class="form-control">
+                    </div>
 
-                <div class="form-group">  
-                    Imagem Atual<br>
-                    <img src="" id="img-edit" class="img-responsive col-md-2">
-                    <input type="file" id="img-categoria-edit">
+                    <input type="hidden" id="id-categoria-edit" name="id-categoria-edit" value="">
 
-                </div>
+                    <div class="form-group">  
+                        Imagem Atual<br>
+                        <img src="" id="img-edit" class="img-responsive col-md-2">
+                        <input type="file" id="img-categoria-edit" name="img-categoria-edit">
 
+                    </div>
 
-
-                <div class="form-group">       
-                    <input type="submit" value="Salvar Alterações" class="btn btn-info col-md-12">
-                </div>
-
+                    <div class="form-group">                               
+                        <input type="submit" id="btn-salvar-edicao" onclick="salvarAlteracoesCategoria();" value="Salvar Alterações" class="btn btn-info col-md-12">
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-danger">Fechar</button>                
