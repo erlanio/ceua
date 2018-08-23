@@ -1,18 +1,18 @@
 <section class="dashboard-header section-padding">
     <div class="container-fluid">
-        <div class="row d-flex align-items-md-stretch">
-            <h3>Administrar Categorias</h3>
-        </div>
-
+      
         <button id="atualizar-tabela-categorias" hidden="">atualizar</button>
-        <div class="d-flex align-items-md-stretch">
+       
+        <div class="card">
+            <div class="card-header">
+                <h4>Administrar Categorias</h4>
+            </div>
+            
+             <div class="d-flex align-items-md-stretch">
             <button class="btn btn-primary col-md-3" data-toggle="modal" data-target="#cadastro-categoria"><i class="fa fa-plus"></i> Nova Categoria</button>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h4>Categorias</h4>
-            </div>
+            
             <div class="card-body col-md-12">
                 <div class="align-items-md-stretch">
                     <table id="tabela-categorias" class="table-hover table-action tabela-categorias">
@@ -24,8 +24,6 @@
                                 <th>Opções</th>
                             </tr>
                         </thead>
-
-
                     </table>
                 </div>
             </div>

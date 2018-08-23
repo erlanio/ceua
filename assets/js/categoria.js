@@ -1,7 +1,5 @@
 $BASE_URL = "http://localhost/App_tabeliao/";
 
-
-
 $(document).ready(function () {
 
     if (($("#tabela-categorias")).length) {
@@ -114,105 +112,6 @@ $(document).ready(function () {
     }
 
 
-
-//TABELA PRODUTOS
-    if (($("#tabela-produtos")).length) {
-
-
-        var tabelaProdutos = $('#tabela-produtos').DataTable({
-            "ajax": {
-
-                url: $BASE_URL + 'Produtos/getProdutos',
-                type: 'GET',
-
-            },
-
-            "language": {
-                "sEmptyTable": "Nenhum registro encontrado",
-                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                "sInfoPostFix": "",
-                "sInfoThousands": ".",
-                "sLengthMenu": "_MENU_ resultados por página",
-                "sLoadingRecords": "Carregando...",
-                "sProcessing": "Processando...",
-                "sZeroRecords": "Nenhum registro encontrado",
-                "sSearch": "Pesquisar",
-                "oPaginate": {
-                    "sNext": "Próximo",
-                    "sPrevious": "Anterior",
-                    "sFirst": "Primeiro",
-                    "sLast": "Último"
-                },
-                "oAria": {
-                    "sSortAscending": ": Ordenar colunas de forma ascendente",
-                    "sSortDescending": ": Ordenar colunas de forma descendente"
-                }
-            }
-
-
-
-        });
-
-    }
-
-    $('#atualizar-tabela-produtos').click(function () {
-        tabelaProdutos.ajax.reload();
-    })
-
-
-    $('#img-produto').on('change', function () {
-
-        var fr = new FileReader;
-
-        fr.onload = function () {
-            var img = new Image;
-
-            img.onload = function () {
-
-                if (img.width != 250 && this.height != 250) {
-                    $('#retorno-imagem-produto').addClass("alert alert-danger");
-                    $('#retorno-imagem-produto').html("Ops! A imagem deve conter as seguintes dimensões: <br> Largura: 250px<br>Altura: 250px;");
-                } else {
-                    $('#btn-salvar-produto').removeAttr('disabled');
-
-                }
-            };
-
-            img.src = fr.result;
-        };
-
-        fr.readAsDataURL(this.files[0]);
-
-    });
-
-
-
-    $('#btn-salvar-produto').click(function () {
-        $nome_produto = $('#nome-produto').val();
-        $desc_produto = $('#desc-produto').val();
-
-        if ($nome_produto == null || $desc_produto == "") {
-            $('#retorno-salvar-produto').addClass("alert alert-danger");
-            $('#retorno-salvar-produto').html("Ops! Preencha todos os dados para continuar!");
-        } else {
-            $('#form-produto').ajaxForm({
-                target: '#retorno-salvar-produto' // o callback serÃ¡ no elemento com o id #visualizar
-            }).submit();
-            $('#atualizar-tabela-produtos').click();
-            $('#nome-produto').val("");
-            $('#desc-produto').val("");
-            $('#img-produto').val("");
-            
-            notify("Salvo com sucesso!", "success");
-           
-        }
-
-    })
-
-//FIM PRODUTOS
-
 });
 
 
@@ -285,82 +184,6 @@ function salvarAlteracoesCategoria() {
     notify("Dados alterados com sucesso!", "info");
     $('#atualizar-tabela-categorias').click();
 }
-
-
-
-
-function excluirProduto($id, $img) {
-
-    bootbox.confirm({
-        message: "Tem certeza que deseja deletar esta produto?",
-        buttons: {
-            confirm: {
-                label: 'Sim',
-                className: 'btn-success'
-            },
-            cancel: {
-                label: 'Não',
-                className: 'btn-danger enviar'
-            }
-        },
-        callback: function (result) {
-            if (result == true) {
-
-                $.ajax({
-                    url: $BASE_URL + "Produtos/deletar",
-                    type: 'POST',
-                    dataType: 'html',
-                    data: ({
-                        'id': $id,
-                        'img': $img
-                    })
-
-                }).done(function (data) {
-                    notify("Excluido com sucesso!", "danger");
-                    $('#atualizar-tabela-produtos').click();
-                });
-            }
-        }
-    });
-
-}
-
-function alterarProduto($id) {
-
-    $.ajax({
-        url: $BASE_URL + 'Produtos/buscarProdutos',
-        type: 'POST',
-        dataType: 'html',
-        data: ({
-            'id': $id,
-        })
-
-    }).done(function (data) {
-
-        var obj = JSON.parse(data);
-        obj.forEach(function (o, index) {
-            $('#nome-produto-edit').val(o.nome_produto);
-            $('#desc-produto-edit').val(o.desc_produto);
-            $('#categoria-produto-edit').val(o.id_categoria);    
-            $('#id-produto-edit').val(o.id_produto);
-            $imagem = $BASE_URL + "assets/img/produtos/" + o.img_produto;
-            $('#img-edit').attr('src', $imagem);
-        });
-
-    });
-}
-
-function salvarAlteracoesProduto() {
-    $('#form-produto-update').ajaxForm({
-        target: '#' // o callback serÃ¡ no elemento com o id #visualizar
-    }).submit();
-    notify("Dados alterados com sucesso!", "info");
-    $('#atualizar-tabela-produtos').click();
-    $('#editar-produto').modal('hide');
-}
-
-
-
 
 
 function notify($mensagem, $tipo) {

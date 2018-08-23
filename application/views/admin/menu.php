@@ -16,6 +16,8 @@
             <ul id="side-main-menu" class="side-menu list-unstyled">                  
                 <li><a href="<?php echo base_url('Home'); ?>"><i class="icon-home"></i>Home</a></li>
                 <li><a href="<?php echo base_url('Categorias'); ?>"><i class="icon-form"></i>Categorias</a></li>               
+                <li><a href="<?php echo base_url('Produtos'); ?>"><i class="icon-form"></i>Marcas</a></li>            
+                <li><a href="<?php echo base_url('Produtos'); ?>"><i class="icon-form"></i>Produtos</a></li>            
             </ul>
         </div>
 
