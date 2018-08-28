@@ -16,8 +16,11 @@
             <ul id="side-main-menu" class="side-menu list-unstyled">                  
                 <li><a href="<?php echo base_url('Home'); ?>"><i class="icon-home"></i>Home</a></li>
                 <li><a href="<?php echo base_url('Categorias'); ?>"><i class="icon-form"></i>Categorias</a></li>               
-                <li><a href="<?php echo base_url('Produtos'); ?>"><i class="icon-form"></i>Marcas</a></li>            
                 <li><a href="<?php echo base_url('Produtos'); ?>"><i class="icon-form"></i>Produtos</a></li>            
+                <li><a href="<?php echo base_url('Marcas'); ?>"><i class="icon-form"></i>Marcas</a></li>            
+                <li><a href="<?php echo base_url('Tamanhos'); ?>"><i class="icon-form"></i>Tamanhos</a></li>            
+                <li><a href="<?php echo base_url('Supermercados'); ?>"><i class="icon-form"></i>Supermercados</a></li>            
+                <li><a href="<?php echo base_url('Valores'); ?>"><i class="icon-form"></i>Valores</a></li>           
             </ul>
         </div>
 

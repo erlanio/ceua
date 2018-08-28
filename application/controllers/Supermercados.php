@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Marcas extends CI_Controller {
+class Supermercados extends CI_Controller {
 
     /**
      * Index Page for this controller.
@@ -21,72 +21,72 @@ class Marcas extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
-        $this->load->model('Model_Categoria', 'categoria');
-        $this->load->model('Model_Marcas', 'marcas');
-        $this->load->model('Model_Produtos', 'produtos');
+        $this->load->model('Model_Supermercados', 'supermercados');
     }
 
     public function index() {
-        $data['produtos'] = $this->produtos->getProdutos();
+
 
         $this->load->view('admin/header');
         $this->load->view('admin/menu');
-        $this->load->view('admin/marcas', $data);
+        $this->load->view('admin/supermercados');
     }
-    
-    
- 
 
-
-    public function buscarMarcas() {
+    public function buscarSupermercados() {
         $id = $this->input->post('id');
-        $data['marcas'] = $this->marcas->buscarMarcas($id);
-        echo json_encode($data['marcas']);
+        $data['supermercados'] = $this->supermercados->buscarSupermercados($id);
+        echo json_encode($data['supermercados']);
     }
 
     public function salvar() {
-        $pasta = "assets/img/marcas/";
-        $tipoArquivos = array(".jpg", ".jpeg", ".gif", ".png", ".bmp");
-        $input = "img-marcas";
-        $campo = "img_marca";
-        $id_imagem = "img-marcas";
-        $nome_marca = $this->input->post('nome-marcas');
-        $desc_marca = $this->input->post('desc-marcas');
-        $id_produto = $this->input->post('id-produto-marcas');
-        $id_marca = null;
-        $this->inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_marca, $desc_marca, $id_produto, $id_marca = null);
+        $nome = $this->input->post('nome');
+        $endereco = $this->input->post('endereco');
+        $telefone = preg_replace("/\D+/", "", $this->input->post('telefone'));
+        $mapa = $this->input->post('mapa');
+
+        $data['nome_supermercado'] = $nome;
+        $data['endereco_supermercado'] = $endereco;
+        $data['telefone_supermercado'] = $telefone;
+        $data['maps_supermercado'] = $mapa;
+        if ($this->supermercados->verificaIfExists($nome) == 0) {
+
+            $this->supermercados->salvar($data);
+        } else {
+            echo 1;
+        }
+
+
+//        if ($this->tamanhos->verificaTamanho($tamanho) == 0) {
+//            $data['desc_tamanho'] = $tamanho;
+//            $this->tamanhos->salvar($data);
+//        }else{
+//            echo 1;
+//        }
+    }
+
+    public function buscarTamanhos() {
+        $id = $this->input->post('id');
+        $data['tamanhos'] = $this->tamanhos->buscarTamanhos($id);
+        echo json_encode($data['tamanhos']);
     }
 
     public function update() {
-        $nome_marca = $this->input->post('nome-marcas-edit');
-        $desc_marca = $this->input->post('desc-marcas-edit');
-        $id_produto = $this->input->post('produto-marcas-edit');
-        $id_marca = $this->input->post('id-marcas-edit');
+        $id = $this->input->post('id');
+        $nome = $this->input->post('nome');
+        $telefone = preg_replace("/\D+/", "", $this->input->post('telefone'));
+        $endereco = $this->input->post('endereco');
+        $maps = $this->input->post('maps');
 
-        $data['nome_marca'] = $nome_marca;
-        $data['desc_marca'] = $desc_marca;
-        $data['id_marca'] = $id_marca;
-        $data['id_produto'] = $id_produto;
-
-        if (isset($_FILES["img-marcas-edit"])) {
-
-            $pasta = "assets/img/marcas/";
-            $tipoArquivos = array(".jpg", ".jpeg", ".gif", ".png", ".bmp");
-            $input = "img-marcas-edit";
-            $campo = "img_marca";
-            $id_imagem = "img-maras-edit";
-
-
-            $this->inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_marca, $desc_marca, $id_produto, $id_marca);
-        } else {
-            echo "<div class='alert alert-success'>Dados alterados com sucesso!</div>";
-
-            $this->marcas->update($data, $id_marca);
-        }
+        $data['nome_supermercado'] = $nome;
+        $data['telefone_supermercado'] = $telefone;
+        $data['endereco_supermercado'] = $endereco;
+        $data['maps_supermercado'] = $maps;                      
+        
+        $this->supermercados->update($data, $id);
     }
 
     public function inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_marca, $desc_marca, $id_produto, $id_marca = null) {
-        
+
         $pasta = $pasta;
         /* formatos de imagem permitidos */
         $permitidos = $tipoArquivos;
@@ -121,7 +121,7 @@ class Marcas extends CI_Controller {
                     $data["id_produto"] = $id_produto;
                     if ($id_marca == null) {
                         $this->marcas->salvar($data);
-                    } else {                        
+                    } else {
                         $this->marcas->update($data, $id_marca);
                     }
                 } else {
@@ -136,8 +136,8 @@ class Marcas extends CI_Controller {
         }
     }
 
-    public function getMarcas() {
-        $data2['marcas'] = $this->marcas->getMarcas();
+    public function getSupermercados() {
+        $data2['supermercados'] = $this->supermercados->getSupermercados();
         // Datatables Variables
         $draw = intval($this->input->get("draw"));
         $start = intval($this->input->get("start"));
@@ -146,18 +146,26 @@ class Marcas extends CI_Controller {
 
         $data = array();
 
-        foreach ($data2['marcas'] as $r) {
-            $url = base_url('assets/img/marcas/' . $r->img_marca);
-            $data[] = array(
-                $r->id_marca,
-                $r->nome_marca,
-                $r->desc_marca,
-                $r->nome_produto,
-                $r->opcoes = "<div class='col-md-12'><button class='btn btn-info col-md-5' data-toggle='modal' data-target='#editar-marcas' 
-                    onclick=\"alterarMarcas('$r->id_marca');\"><i class='fa fa-edit'></i> Alterar</button>
+        foreach ($data2['supermercados'] as $r) {
+
+            if($r->ativo == "s"){
+                $opcoes = "<div class='col-md-12'><button class='btn btn-info col-md-5' data-toggle='modal' data-target='#editar-supermercados' 
+                    onclick=\"alterarSupermercados('$r->id_supermercado');\"><i class='fa fa-edit'></i> Alterar</button>
+                    <button class='btn btn-success col-md-5'
+                    onclick=\"desativarSupermercado('$r->id_supermercado', '$r->ativo');\"><i class='fa fa-close'></i> Desativar</button></div>";
+            }else{
+                 $opcoes = "<div class='col-md-12'><button class='btn btn-info col-md-5' data-toggle='modal' data-target='#editar-supermercados' 
+                    onclick=\"alterarSupermercados('$r->id_supermercado');\"><i class='fa fa-edit'></i> Alterar</button>
                     <button class='btn btn-danger col-md-5'
-                    onclick=\"excluirMarcas('$r->id_marca', '$r->img_marca');\"><i class='fa fa-close'></i> Excluir</button></div>
-",
+                    onclick=\"desativarSupermercado('$r->id_supermercado', '$r->ativo');\"><i class='fa fa-close'></i> Ativar</button></div>";
+            }
+            
+            
+            $data[] = array(
+                $r->id_supermercado,
+                $r->nome_supermercado,
+
+                $r->opcoes = $opcoes,
             );
         }
 
@@ -171,18 +179,17 @@ class Marcas extends CI_Controller {
         exit();
     }
 
-     public function deletar() {
+    public function desativar() {
         $id = $this->input->post('id');
-        $img = $this->input->post('img');
-        echo $img;
-
-        define('EXT', '.' . pathinfo(__FILE__, PATHINFO_EXTENSION));
-        //   define('FCPATH', __FILE__);
-        // define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
-        define('PUBPATH', str_replace(SELF, '', FCPATH)); // added
-
-        $filestring = PUBPATH . 'assets/img/marcas/' . $img;
-        unlink($filestring);
-        $this->marcas->deletar($id);
+        $ativo = $this->input->post('ativo');
+     
+        if($ativo == "s"){
+               $data['ativo'] = "n";
+        }else{
+               $data['ativo'] = "s";
+        }
+        $this->supermercados->update($data, $id);
+        
     }
+
 }

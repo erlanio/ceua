@@ -2,6 +2,9 @@ table{
     text-align: center;
 }
 
+.mapa-supermercado-frame{
+    width: 100%;
+}
 
 @media (max-width: 480px) {
     .table-action thead {
@@ -18,3 +21,14 @@ table{
         display: block;
     }
 }
+
+
+/*DEFINE TAMANHO MODAL*/
+.modal.modal-wide .modal-dialog {
+  min-width: 60%;
+}
+.modal-wide .modal-body {
+  overflow-y: auto;
+}
+
+    

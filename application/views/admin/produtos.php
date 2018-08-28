@@ -1,16 +1,14 @@
 <section class="dashboard-header section-padding">
     <div class="container-fluid">
 
-        <button id="atualizar-tabela-produtos" hidden="">atualizar</button>
-
-
         <div class="card">
             <div class="card-header">
                 <h4>Administrar Produtos</h4>
             </div>
 
             <div class="d-flex align-items-md-stretch">
-                <button class="btn btn-primary col-md-3" data-toggle="modal" data-target="#cadastro-produto"><i class="fa fa-plus"></i> Nova Produto</button>
+                <button class="btn btn-primary offset-md-2 col-md-3" data-toggle="modal" data-target="#cadastro-produto"><i class="fa fa-plus"></i> Nova Produto</button>
+                <button class="btn btn-info offset-md-1 col-md-3" id="atualizar-tabela-produtos"><i class="fa fa-refresh"></i> Atualizar Dados</button>
             </div>
 
             <div class="card-body col-md-12">

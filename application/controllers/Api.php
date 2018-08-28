@@ -30,13 +30,15 @@ class Api extends CI_Controller {
     
     public function tamanhos() {
         $id_marca = $this->uri->segment(3);
-        $data['tamanho'] = $this->api->tamanhos($id_marca);        
+        $id_produto = $this->uri->segment(4);
+        $data['tamanho'] = $this->api->tamanhos($id_marca, $id_produto);        
         echo json_encode($data['tamanho']);
     }
     
     public function valores() {
         $id_tamanho = $this->uri->segment(3);
-        $data['valores'] = $this->api->valores($id_tamanho);
+        $id_marca = $this->uri->segment(4);
+        $data['valores'] = $this->api->valores($id_tamanho, $id_marca);
         echo json_encode($data['valores']);
     }
     

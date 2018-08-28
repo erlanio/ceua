@@ -117,6 +117,8 @@ class Produtos extends CI_Controller {
     }
 
     public function salvar() {
+ 
+        
         $pasta = "assets/img/produtos/";
         $tipoArquivos = array(".jpg", ".jpeg", ".gif", ".png", ".bmp");
         $input = "img-produto";

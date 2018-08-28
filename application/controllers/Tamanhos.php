@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Marcas extends CI_Controller {
+class Tamanhos extends CI_Controller {
 
     /**
      * Index Page for this controller.
@@ -21,22 +21,16 @@ class Marcas extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
-        $this->load->model('Model_Categoria', 'categoria');
-        $this->load->model('Model_Marcas', 'marcas');
-        $this->load->model('Model_Produtos', 'produtos');
+        $this->load->model('Model_Tamanhos', 'tamanhos');
     }
 
     public function index() {
-        $data['produtos'] = $this->produtos->getProdutos();
+
 
         $this->load->view('admin/header');
         $this->load->view('admin/menu');
-        $this->load->view('admin/marcas', $data);
+        $this->load->view('admin/tamanhos');
     }
-    
-    
- 
-
 
     public function buscarMarcas() {
         $id = $this->input->post('id');
@@ -45,48 +39,36 @@ class Marcas extends CI_Controller {
     }
 
     public function salvar() {
-        $pasta = "assets/img/marcas/";
-        $tipoArquivos = array(".jpg", ".jpeg", ".gif", ".png", ".bmp");
-        $input = "img-marcas";
-        $campo = "img_marca";
-        $id_imagem = "img-marcas";
-        $nome_marca = $this->input->post('nome-marcas');
-        $desc_marca = $this->input->post('desc-marcas');
-        $id_produto = $this->input->post('id-produto-marcas');
-        $id_marca = null;
-        $this->inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_marca, $desc_marca, $id_produto, $id_marca = null);
+        $tamanho = $this->input->post('nome_tamanho');
+
+        if ($this->tamanhos->verificaTamanho($tamanho) == 0) {
+            $data['desc_tamanho'] = $tamanho;
+            $this->tamanhos->salvar($data);
+        }else{
+            echo 1;
+        }
     }
 
+    public function buscarTamanhos() {
+        $id = $this->input->post('id');
+        $data['tamanhos'] = $this->tamanhos->buscarTamanhos($id);
+        echo json_encode($data['tamanhos']);
+    }
+    
     public function update() {
-        $nome_marca = $this->input->post('nome-marcas-edit');
-        $desc_marca = $this->input->post('desc-marcas-edit');
-        $id_produto = $this->input->post('produto-marcas-edit');
-        $id_marca = $this->input->post('id-marcas-edit');
-
-        $data['nome_marca'] = $nome_marca;
-        $data['desc_marca'] = $desc_marca;
-        $data['id_marca'] = $id_marca;
-        $data['id_produto'] = $id_produto;
-
-        if (isset($_FILES["img-marcas-edit"])) {
-
-            $pasta = "assets/img/marcas/";
-            $tipoArquivos = array(".jpg", ".jpeg", ".gif", ".png", ".bmp");
-            $input = "img-marcas-edit";
-            $campo = "img_marca";
-            $id_imagem = "img-maras-edit";
-
-
-            $this->inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_marca, $desc_marca, $id_produto, $id_marca);
-        } else {
-            echo "<div class='alert alert-success'>Dados alterados com sucesso!</div>";
-
-            $this->marcas->update($data, $id_marca);
+        $id = $this->input->post('id');
+        $tamanho = $this->input->post('tamanho');
+        
+        if ($this->tamanhos->verificaTamanho($tamanho) == 0) {
+            $data['desc_tamanho'] = $tamanho;
+            $this->tamanhos->update($data, $id);
+        }else{
+            echo 1;
         }
     }
 
     public function inserirImagens($pasta, $tipoArquivos, $input, $campo, $id_imagem, $nome_marca, $desc_marca, $id_produto, $id_marca = null) {
-        
+
         $pasta = $pasta;
         /* formatos de imagem permitidos */
         $permitidos = $tipoArquivos;
@@ -121,7 +103,7 @@ class Marcas extends CI_Controller {
                     $data["id_produto"] = $id_produto;
                     if ($id_marca == null) {
                         $this->marcas->salvar($data);
-                    } else {                        
+                    } else {
                         $this->marcas->update($data, $id_marca);
                     }
                 } else {
@@ -136,8 +118,8 @@ class Marcas extends CI_Controller {
         }
     }
 
-    public function getMarcas() {
-        $data2['marcas'] = $this->marcas->getMarcas();
+    public function getTamanhos() {
+        $data2['tamanhos'] = $this->tamanhos->getTamanhos();
         // Datatables Variables
         $draw = intval($this->input->get("draw"));
         $start = intval($this->input->get("start"));
@@ -146,17 +128,14 @@ class Marcas extends CI_Controller {
 
         $data = array();
 
-        foreach ($data2['marcas'] as $r) {
-            $url = base_url('assets/img/marcas/' . $r->img_marca);
+        foreach ($data2['tamanhos'] as $r) {
+
             $data[] = array(
-                $r->id_marca,
-                $r->nome_marca,
-                $r->desc_marca,
-                $r->nome_produto,
+                $r->id_tamanho,
+                $r->desc_tamanho,
                 $r->opcoes = "<div class='col-md-12'><button class='btn btn-info col-md-5' data-toggle='modal' data-target='#editar-marcas' 
-                    onclick=\"alterarMarcas('$r->id_marca');\"><i class='fa fa-edit'></i> Alterar</button>
-                    <button class='btn btn-danger col-md-5'
-                    onclick=\"excluirMarcas('$r->id_marca', '$r->img_marca');\"><i class='fa fa-close'></i> Excluir</button></div>
+                    onclick=\"alterarTamanhos('$r->id_tamanho');\"><i class='fa fa-edit'></i> Alterar</button>
+                   </div>
 ",
             );
         }
@@ -171,18 +150,8 @@ class Marcas extends CI_Controller {
         exit();
     }
 
-     public function deletar() {
+    public function deletar() {
         $id = $this->input->post('id');
-        $img = $this->input->post('img');
-        echo $img;
-
-        define('EXT', '.' . pathinfo(__FILE__, PATHINFO_EXTENSION));
-        //   define('FCPATH', __FILE__);
-        // define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
-        define('PUBPATH', str_replace(SELF, '', FCPATH)); // added
-
-        $filestring = PUBPATH . 'assets/img/marcas/' . $img;
-        unlink($filestring);
-        $this->marcas->deletar($id);
     }
+
 }
