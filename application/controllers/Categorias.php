@@ -22,6 +22,7 @@ class Categorias extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Model_Categoria', 'categoria');
+          if($this->session->userdata('usuario')==null) redirect('Login');
     }
 
     public function index() {

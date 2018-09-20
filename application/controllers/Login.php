@@ -20,9 +20,10 @@ class Login extends CI_Controller {
      * @see https://codeigniter.com/user_guide/general/urls.html
      */
     public function index() {
-
+        $this->load->view('header');
         $this->load->view('login');
-        $this->load->view('footer');
+        
+        
     }
 
     public function __construct() {
@@ -34,14 +35,13 @@ class Login extends CI_Controller {
 
         $email = $this->input->post('email');
         $password = md5($this->input->post('senha'));
-
-        $usuario = $this->pessoa->retornaEmailSenha($email, $password);
+        $usuario = $this->pessoa->retornaPessoa($email, $password);
 
         if ($usuario) {
-            $dados = $this->pessoa->retornaEmailSenha($email, $password);
+            $dados = $this->pessoa->retornaPessoa($email, $password);
             $registro = array('usuario' => $dados[0], 'usuario_logado' => true);
             $this->session->set_userdata($registro);
-            redirect(base_url('admin/Inscricoes'));
+            redirect(base_url('Home'));
         } else {
             echo "<script>"
             . "window.location.href = '"

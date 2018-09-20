@@ -22,8 +22,7 @@ class Marcas extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Model_Categoria', 'categoria');
-        $this->load->model('Model_Marcas', 'marcas');
-        $this->load->model('Model_Produtos', 'produtos');
+          if($this->session->userdata('usuario')==null) redirect('Login');
     }
 
     public function index() {

@@ -57,9 +57,15 @@
                                 <li><a rel="nofollow" href="#" class="dropdown-item all-notifications text-center"> <strong> <i class="fa fa-envelope"></i>Ver todas as mensagens   </strong></a></li>
                             </ul>
                         </li>
-
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li class="nav-item"><a href="#" class="nav-link logout"> <span class="d-none d-sm-inline-block"><strong>Bem Vindo: </strong><?php echo $this->session->userdata('usuario')->nome_usuario; ?></span></a></li>
                         <!-- Log out-->
-                        <li class="nav-item"><a href="login.html" class="nav-link logout"> <span class="d-none d-sm-inline-block">Sair</span><i class="fa fa-sign-out"></i></a></li>
+                        <li class="nav-item"><a href="<?php echo base_url('Login/logout'); ?>" class="nav-link logout"> <span class="d-none d-sm-inline-block">Sair</span><i class="fa fa-sign-out"></i></a></li>
                     </ul>
                 </div>
             </div>
