@@ -27,6 +27,7 @@ class Valores extends CI_Controller {
         $this->load->model('Model_Valores', 'valores');
         $this->load->model('Model_Produtos', 'produtos');
         $this->load->model('Model_Categoria', 'categorias');
+        if($this->session->userdata('usuario')==null) redirect('Login');
     }
 
     public function index() {
