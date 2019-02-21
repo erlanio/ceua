@@ -44,5 +44,8 @@ class Model_Api extends CI_Model {
     
     public function supermercado($id_supermercado) {
         return $this->db->query("SELECT * from supermecados WHERE id_supermercado = $id_supermercado")->result();
+        
     }
+    
+    
 }

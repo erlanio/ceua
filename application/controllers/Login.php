@@ -19,36 +19,33 @@ class Login extends CI_Controller {
      * map to /index.php/welcome/<method_name>
      * @see https://codeigniter.com/user_guide/general/urls.html
      */
-    public function index() {
-        $this->load->view('header');
-        $this->load->view('login');
-        
-        
-    }
-
     public function __construct() {
         parent::__construct();
+        
         $this->load->model('Model_Pessoa', 'pessoa');
+    }
+
+    public function index() {
+
+        $data['estados'] = $this->pessoa->retornaEstados();
+
+        $this->load->view('header');
+        $this->load->view('login', $data);
     }
 
     public function logar() {
 
         $email = $this->input->post('email');
         $password = md5($this->input->post('senha'));
-        $usuario = $this->pessoa->retornaPessoa($email, $password);
+        $usuario = $this->pessoa->verificaLogin($email, $password);
 
-        if ($usuario) {
+        if ($usuario != 0) {
             $dados = $this->pessoa->retornaPessoa($email, $password);
             $registro = array('usuario' => $dados[0], 'usuario_logado' => true);
             $this->session->set_userdata($registro);
-            redirect(base_url('Home'));
+            echo 1;
         } else {
-            echo "<script>"
-            . "window.location.href = '"
-            . base_url('Login')
-            . "';"
-            . "alert('Email ou senha incorretos!');"
-            . "</script>";
+            echo 2;
         }
     }
 
@@ -186,13 +183,12 @@ class Login extends CI_Controller {
         $this->email->initialize($config);
     }
 
-    
     public function logarPopUp() {
 
         $email = $this->input->post('email');
         $password = md5($this->input->post('senha'));
 
-        
+
         $usuario = $this->pessoa->retornaEmailSenha($email, $password);
 
         if ($usuario) {
@@ -202,7 +198,7 @@ class Login extends CI_Controller {
             echo 2;
         } else {
             echo 1;
-            
         }
     }
+
 }

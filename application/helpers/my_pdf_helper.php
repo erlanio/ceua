@@ -1,6 +1,10 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 if (!function_exists('create_pdf')) {
+
     /**
      * Gerar PDF
      * @param  String $html_data View que vai compor o PDF
@@ -14,7 +18,7 @@ if (!function_exists('create_pdf')) {
         $mypdf = new mPDF();
         $mypdf->SetDisplayMode('fullpage');
         $hyphenate->mypdf = true;
-		$mypdf->KeepColumns = true;
+        $mypdf->KeepColumns = true;
         $mypdf->WriteHTML($html_data);
         $mypdf->Output($file_name . '.pdf', 'D');
     }
@@ -33,8 +37,9 @@ if (!function_exists('create_pdf')) {
         $mypdf->SetDisplayMode('fullpage');
         $hyphenate->mypdf = true;
         $mypdf->KeepColumns = true;
-        $mypdf->SetColumns(2,'J',5);
+        $mypdf->SetColumns(2, 'J', 5);
         $mypdf->WriteHTML($html_data);
         $mypdf->Output($file_name . '.pdf', 'D');
     }
+
 }

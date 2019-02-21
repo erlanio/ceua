@@ -9,11 +9,57 @@ class Model_Pessoa extends CI_Model {
         parent::__construct();
     }
 
-    public function retornaPessoa($email, $senha) {
-       $this->db->where('email_usuario', $email);
-       $this->db->where('senha_usuario', $senha);
-       $this->db->where('ativo_usuario', 's');
-       return $this->db->get('usuarios')->result();
-       
+    public function retornaEstados() {
+        $this->db->order_by('nome', 'asc');
+        return $this->db->get('estados')->result();
     }
+
+    public function retornaCidadesPorEstado($id_estado) {
+        $this->db->where('estados_id', $id_estado);
+        return $this->db->get('cidades')->result();
+    }
+
+    public function selectedCidades($id_estado) {
+        $cidades = $this->retornaCidadesPorEstado($id_estado);
+
+        $option = "<option>Selecione a cidade...</option>";
+
+        foreach ($cidades as $cidade) {
+            $option .= "<option value='$cidade->id'>{$cidade->nome}</option>" . PHP_EOL;
+        }
+        return $option;
+    }    
+    
+
+    public function salvar($data) {
+        return $this->db->insert('pessoa', $data);
+    }
+
+    public function verificaCPF($cpf) {
+        $this->db->where('cpf_pessoa', $cpf);
+        return $this->db->get('pessoa')->num_rows();
+    }
+    
+    public function verificaLogin($email, $senha) {
+        $this->db->where('email_pessoa', $email);
+        $this->db->where('senha_pessoa', $senha);        
+        return $this->db->get('pessoa')->num_rows();
+    }
+    
+    public function retornaPessoa($email, $senha) {
+         $this->db->where('email_pessoa', $email);
+        $this->db->where('senha_pessoa', $senha);        
+        return $this->db->get('pessoa')->result();
+    }
+    
+    public function retornaCidade() {
+        $this->db->where('id', $this->session->userdata('usuario')->id_cidade);
+        return $this->db->get('cidades')->result();
+    }
+       
+    public function buscar($id_pessoa) {
+        $this->db->where('id_pessoa', $id_pessoa);
+        return $this->db->get('pessoa')->result();
+    }
+
 }

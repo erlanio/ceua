@@ -1,39 +1,38 @@
 <!-- Side Navbar -->
-<nav class="side-navbar">
+<nav class="side-navbar verde">
     <div class="side-navbar-wrapper">
         <!-- Sidebar Header    -->
         <div class="sidenav-header d-flex align-items-center justify-content-center">
             <!-- User Info-->
             <div class="sidenav-header-inner text-center"><img src="<?php echo base_url('assets/img/icone.png'); ?>" alt="icone" class="img-fluid rounded-circle">
-                <h2 class="h5">Compras APP</h2><span></span>
+                <h2 class="h5">CEUA - URCA</h2><span></span>
             </div>
             <!-- Small Brand information, appears on minimized sidebar-->
-            <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>B</strong><strong class="text-primary">D</strong></a></div>
+            <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <img src="<?php echo base_url('assets/img/icone.png'); ?>" alt="icone" class="img-fluid rounded-circle"></div>
         </div>
         <!-- Sidebar Navigation Menus-->
         <div class="main-menu">
-            <h5 class="sidenav-heading">Main</h5>
+            <h5 class="sidenav-heading">URCA</h5>
             <ul id="side-main-menu" class="side-menu list-unstyled">                  
-                <li><a href="<?php echo base_url('Home'); ?>"><i class="icon-home"></i>Home</a></li>
-                <li><a href="<?php echo base_url('Categorias'); ?>"><i class="icon-form"></i>Categorias</a></li>               
-                <li><a href="<?php echo base_url('Produtos'); ?>"><i class="icon-form"></i>Produtos</a></li>            
-                <li><a href="<?php echo base_url('Marcas'); ?>"><i class="icon-form"></i>Marcas</a></li>            
-                <li><a href="<?php echo base_url('Tamanhos'); ?>"><i class="icon-form"></i>Tamanhos</a></li>            
-                <li><a href="<?php echo base_url('Supermercados'); ?>"><i class="icon-form"></i>Supermercados</a></li>            
-                <li><a href="<?php echo base_url('Valores'); ?>"><i class="icon-form"></i>Valores</a></li>           
+                <li><a href="<?php echo base_url('Home'); ?>"><i class="icon-home"></i>Início</a></li>
+                <li><a href="<?php echo base_url('Pessoa/dados'); ?>"><i class="icon-user"></i>Meus Dados</a></li>            
+                <li><a href="<?php echo base_url('Projeto'); ?>"><i class="icon-page"></i>Projetos</a></li>               
+                
+                    
+                         
             </ul>
         </div>
 
     </div>
 </nav>
-<div class="page">
+<div class="page ">
     <!-- navbar-->
     <header class="header">
         <nav class="navbar">
             <div class="container-fluid">
                 <div class="navbar-holder d-flex align-items-center justify-content-between">
                     <div class="navbar-header"><a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand">
-                            <div class="brand-text d-none d-md-inline-block"><span>Compras </span><strong class="text-primary">App</strong></div></a></div>
+                            <div class="brand-text d-none d-md-inline-block"><span>CEUA </span><strong class="text-primary"> URCA</strong></div></a></div>
                     <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
 
                         <!-- Messages dropdown-->
@@ -63,7 +62,7 @@
                         
                         
                         
-                        <li class="nav-item"><a href="#" class="nav-link logout"> <span class="d-none d-sm-inline-block"><strong>Bem Vindo: </strong><?php echo $this->session->userdata('usuario')->nome_usuario; ?></span></a></li>
+                        <li class="nav-item"><a href="#" class="nav-link logout"> <span class="d-none d-sm-inline-block"><strong>Bem Vindo: </strong><?php echo $this->session->userdata('usuario')->nome_pessoa; ?></span></a></li>
                         <!-- Log out-->
                         <li class="nav-item"><a href="<?php echo base_url('Login/logout'); ?>" class="nav-link logout"> <span class="d-none d-sm-inline-block">Sair</span><i class="fa fa-sign-out"></i></a></li>
                     </ul>

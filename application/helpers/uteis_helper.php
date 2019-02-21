@@ -167,5 +167,9 @@ function inserirImagens($pasta, $tipoArquivos, $input) {
     }
 }
 
+function removerMascara($string) {
+    return preg_replace("/\D+/", "", $string);
+}
+
 /* End of file site_helper.php */
 /* Location: ./application/helpers/helper.php */
