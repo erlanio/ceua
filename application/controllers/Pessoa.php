@@ -22,16 +22,15 @@ class Pessoa extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Model_Pessoa', 'pessoa');
+        $this->load->model('Model_Projeto', 'projeto');
         $this->load->helper('uteis');
     }
-
 
     public function buscar() {
         $id = $this->input->post('id_pessoa');
         $data['pessoa'] = $this->pessoa->buscar($id);
         echo json_encode($data['pessoa']);
     }
-
 
     public function getCidades() {
         $id_estado = $this->input->post('id_estado');
@@ -61,6 +60,48 @@ class Pessoa extends CI_Controller {
         } else {
             echo 'Usuário já cadastrado!';
         }
+    }
+
+    public function buscarCPF() {
+        $cpf = $this->input->post('cpf');
+        $data['pessoa'] = $this->pessoa->buscarCPF($cpf);
+        echo json_encode($data['pessoa']);
+    }
+
+    public function salvarMembro() {
+        //MONTA ARRAY PESSOA
+        $data['nome_pessoa'] = strtoupper($this->input->post('nome'));
+        $data['telefone'] = removerMascara($this->input->post('telefone'));
+        $data['cpf_pessoa'] = removerMascara($this->input->post('cpf'));
+        $data['email_pessoa'] = $this->input->post('email');
+        $data['lattes'] = $this->input->post('lattes');
+        $data['departamento'] = strtoupper($this->input->post('dpto'));
+        $data['instituicao'] = strtoupper($this->input->post('instituicao'));
+
+
+        //MONTA ARRAY EQUIPE
+        $data2['xp_previa'] = strtoupper($this->input->post('experiencia_previa'));
+        $data2['qt_tmpo_previa'] = strtoupper($this->input->post('xptmpo'));
+        $data2['treinamento'] = strtoupper($this->input->post('treinamento'));
+        $data2['qt_tmpo_treinamento'] = strtoupper($this->input->post('treiqtotmpo'));
+        $data2['outros'] = strtoupper($this->input->post('outros_vinculo'));
+        $data2['id_vinculo'] = strtoupper($this->input->post('vinculo'));
+
+        $id_pessoa = $this->input->post('id_pessoa');
+        if ($id_pessoa == "") {
+            $id_pessoa = $this->pessoa->salvarMembro($data);
+            $data2['id_pessoa'] = $id_pessoa;
+            $this->projeto->salvarMembro($data2);
+        } else {
+            $data2['id_pessoa'] = $id_pessoa;
+            $this->projeto->salvarMembro($data2);
+        }
+    }
+    
+    
+
+    public function lastInsert() {
+        echo $this->pessoa->lastInsert();
     }
 
     public function dados() {

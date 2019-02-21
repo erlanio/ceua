@@ -13,7 +13,7 @@
 
         <div class="accordion">
             <h3 class="accordion-toggle" id="titulo-projeto">IDENTIFICAÇÃO DO EXPERIMENTO <span class="arrow"></span></h3>
-            <div class="accordion-content default" id="projeto">
+            <div class="accordion-content " id="projeto">
 
                 
                 <form method="post" id="form-categoria" onsubmit="return false" enctype="multipart/form-data">
@@ -123,7 +123,7 @@
 
 
             <h3 class="accordion-toggle" id="equipe">EQUIPE<span class="arrow"></span></h3>
-            <div class="accordion-content ">
+            <div class="accordion-content default">
 
                 <button class="btn btn-primary col-md-3" data-toggle="modal" data-target="#cadastro-projeto"><i class="fa fa-plus"></i> Adicionar Membro</button>
 

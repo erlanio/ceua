@@ -23,11 +23,16 @@ class Projeto extends CI_Controller {
         $data['areas'] = $this->projeto->areas();
         $data['vinculos'] = $this->projeto->vinculos();
         $data['finalidades'] = $this->projeto->finAcademica();
+        
 
         $this->load->view('admin/header');
         $this->load->view('admin/menu');
         $this->load->view('admin/novo-projeto', $data);
         $this->load->view('admin/modal-add-membros');
+    }
+    
+    public function tabelaMembros() {
+        
     }
 
     public function selectedSubArea() {
@@ -57,6 +62,8 @@ class Projeto extends CI_Controller {
         
         $this->projeto->salvar($data);
     }
+    
+    
 
     public function salvarImagem() {
         $pasta = "assets/img/categorias/";

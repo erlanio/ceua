@@ -12,6 +12,9 @@ $(document).ready(function () {
 //        $(this).find('.arrow').toggleClass('arrow-open');
 //    });
 
+    $('#vinculo-outros').hide();
+
+
     $("#experiencia-previa").change(function () {
 
         if ($('#experiencia-previa').val() == "n") {
@@ -22,6 +25,8 @@ $(document).ready(function () {
         }
 
     });
+
+
 
     $("#treinamento-previo").change(function () {
 
@@ -47,6 +52,7 @@ $(document).ready(function () {
             }).done(function (data) {
                 var obj = JSON.parse(data);
                 obj.forEach(function (o, index) {
+                    $('#id_usuario').val(o.id_pessoa);
                     $('#nome-responsavel').val(o.nome_pessoa);
                     $('#cpf_responsavel').val(o.cpf_pessoa);
                     $('#email_responsavel').val(o.email_pessoa);
@@ -164,10 +170,7 @@ $(document).ready(function () {
         mask: ["999.999.999-99", ],
         keepStatic: true
     });
-    $("#cpf_responsavel").inputmask({
-        mask: ["999.999.999-99", ],
-        keepStatic: true
-    });
+
 
     $("#rg").inputmask({
         mask: ["9999999999-9", ],
@@ -288,8 +291,110 @@ $(document).ready(function () {
         }
     })
 
+    $("#vinculo").change(function () {
+        if ($('#vinculo').val() == 9) {
+            $('#vinculo-outros').show('slow');
+            $('#select-vinculo').removeClass("col-md-12");
+            $('#select-vinculo').addClass('col-md-6')
+        } else {
+            $('#vinculo-outros').hide('slow');
+            $('#select-vinculo').addClass("col-md-12");
+            $('#select-vinculo').removeClass('col-md-6')
+        }
+
+    });
 
 
+    $('#salvar-equipe').click(function () {
+        cpf = $('#cpf_responsavel').val()
+        nome = $('#nome-responsavel').val()
+        instituicao = $('#instituicao_responsavel').val()
+        dpto = $('#dpto_responsavel').val()
+        telefone = $('#telefone').val()
+        email = $('#email_responsavel').val()
+        xptmpo = $('#xp-quanto-tempo').val()
+        experiencia_previa = $('#experiencia-previa').val()
+        lattes = $('#lattes_responsavel').val()
+        treinamento = $('#treinamento-previo').val()
+        treiqtotmpo = $('#treinamento-quanto-tempo').val()
+        vinculo = $('#vinculo').val()
+        outros_vinculo = $('#vinculo-form').val()
+        id_usuario =  $('#id_usuario').val();
+
+        if (cpf == "" || nome == "" || dpto == "" || instituicao == "" || telefone == "" || email == ""  || experiencia_previa == "" || lattes == "" || treinamento == "") {
+            notify("Informe todos os dados para continuar!", "danger");
+        } else {
+
+            $.ajax({
+                url: $BASE_URL + 'pessoa/salvarMembro',
+                type: 'POST',
+                dataType: 'html',
+                data: ({
+                    'nome': nome,
+                    'email': email,
+                    'cpf': cpf,                   
+                    'telefone': telefone,
+                    'lattes': lattes,
+                    'dpto': dpto,
+                    'instituicao': instituicao,
+                    'experiencia_previa': experiencia_previa,
+                    'xptmpo': xptmpo,
+                    'treinamento': treinamento,
+                    'treiqtotmpo': treiqtotmpo,
+                    'outros_vinculo': outros_vinculo,
+                    'id_pessoa': id_usuario,
+                    'vinculo': vinculo
+
+                })
+
+            }).done(function (data) {
+                console.log(data);
+            });
+        }
+
+
+
+    })
+
+    $('#cpf_responsavel').keyup(function () {
+        $tamanho = $('#cpf_responsavel').val().length;
+
+        if ($tamanho == 11) {
+
+            $cpf = $('#cpf_responsavel').val();
+
+            $.ajax({
+                url: $BASE_URL + 'pessoa/buscarCPF',
+                type: 'POST',
+                dataType: 'html',
+                data: ({
+                    'cpf': $cpf,
+                })
+
+            }).done(function (data) {
+                var obj = JSON.parse(data);
+                obj.forEach(function (o, index) {
+                    $('#id_usuario').val(o.id_pessoa);
+                    $('#nome-responsavel').val(o.nome_pessoa);
+                    $('#cpf_responsavel').val(o.cpf_pessoa);
+                    $('#email_responsavel').val(o.email_pessoa);
+                    $('#telefone').val(o.telefone);
+                    $('#lattes_responsavel').val(o.lattes);
+                    $('#instituicao_responsavel').val(o.instituicao);
+                    $('#dpto_responsavel').val(o.departamento);
+                });
+            });
+
+        } else if ($tamanho < 11 || $tamanho > 11) {
+            $('#id_usuario').val("");
+            $('#nome-responsavel').val("");
+            $('#email_responsavel').val("");
+            $('#telefone').val("");
+            $('#lattes_responsavel').val("");
+            $('#instituicao_responsavel').val("");
+            $('#dpto_responsavel').val("");
+        }
+    });
 
 
 });
@@ -380,8 +485,6 @@ if (($("#tabela-categorias")).length) {
 
 
     $('#btn-salvar-categoria').click(function () {
-
-
 
         $nome_categoria = $('#nome-categoria').val();
         $desc_categoria = $('#desc-categoria').val();

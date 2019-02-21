@@ -60,4 +60,8 @@ class Model_Projeto extends CI_Model {
     public function salvar($data) {
         return $this->db->insert('projeto', $data);
     }
+    
+    public function salvarMembro($data) {
+        return $this->db->insert('equipe', $data);
+    }
 }

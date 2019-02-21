@@ -28,37 +28,46 @@ class Model_Pessoa extends CI_Model {
             $option .= "<option value='$cidade->id'>{$cidade->nome}</option>" . PHP_EOL;
         }
         return $option;
-    }    
-    
+    }
 
     public function salvar($data) {
         return $this->db->insert('pessoa', $data);
+    }
+
+    public function salvarMembro($data) {
+        $this->db->insert('pessoa', $data);
+        return $this->db->insert_id();
     }
 
     public function verificaCPF($cpf) {
         $this->db->where('cpf_pessoa', $cpf);
         return $this->db->get('pessoa')->num_rows();
     }
-    
+
     public function verificaLogin($email, $senha) {
         $this->db->where('email_pessoa', $email);
-        $this->db->where('senha_pessoa', $senha);        
+        $this->db->where('senha_pessoa', $senha);
         return $this->db->get('pessoa')->num_rows();
     }
-    
+
     public function retornaPessoa($email, $senha) {
-         $this->db->where('email_pessoa', $email);
-        $this->db->where('senha_pessoa', $senha);        
+        $this->db->where('email_pessoa', $email);
+        $this->db->where('senha_pessoa', $senha);
         return $this->db->get('pessoa')->result();
     }
-    
+
     public function retornaCidade() {
         $this->db->where('id', $this->session->userdata('usuario')->id_cidade);
         return $this->db->get('cidades')->result();
     }
-       
+
     public function buscar($id_pessoa) {
         $this->db->where('id_pessoa', $id_pessoa);
+        return $this->db->get('pessoa')->result();
+    }
+
+    public function buscarCPF($cpf) {
+        $this->db->where('cpf_pessoa', $cpf);
         return $this->db->get('pessoa')->result();
     }
 
