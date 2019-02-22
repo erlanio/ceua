@@ -71,4 +71,13 @@ class Model_Pessoa extends CI_Model {
         return $this->db->get('pessoa')->result();
     }
 
+    public function getMembros($id_projeto) {
+        return $this->db->query("select 
+ 	vi.desc_vinculo,
+    p.id_pessoa,
+    p.nome_pessoa,
+    e.id_equipe
+    from equipe as e join pessoa as p on e.id_pessoa = p.id_pessoa join projeto as pr on pr.id_projeto = e.id_projeto join vinculos_instituicao as vi on vi.id_vinculo = e.id_vinculo where e.id_projeto = $id_projeto")->result();
+    }
+
 }

@@ -8,14 +8,14 @@
             </div>                               
         </div>
 
-
+        <input type="text" id="id_projeto">
 
 
         <div class="accordion">
             <h3 class="accordion-toggle" id="titulo-projeto">IDENTIFICAÇÃO DO EXPERIMENTO <span class="arrow"></span></h3>
-            <div class="accordion-content " id="projeto">
+            <div class="accordion-content default " id="projeto">
 
-                
+
                 <form method="post" id="form-categoria" onsubmit="return false" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Título do Projeto / Aula Prática:</label>
@@ -123,37 +123,26 @@
 
 
             <h3 class="accordion-toggle" id="equipe">EQUIPE<span class="arrow"></span></h3>
-            <div class="accordion-content default">
+            <div class="accordion-content">
 
-                <button class="btn btn-primary col-md-3" data-toggle="modal" data-target="#cadastro-projeto"><i class="fa fa-plus"></i> Adicionar Membro</button>
+                <button class="btn btn-primary col-md-3" data-toggle="modal" data-target="#cadastro-projeto"><i class="fa fa-plus"></i> Adicionar Membro</button>                                
 
                 <div class="card-body col-md-12">
                     <div class="align-items-md-stretch">
-                        <table class="table-hover table-action tabelas col-md-12">
+                        <table id="tabela-membros" class="table-hover table-action tabela-marcas">
                             <thead>
                                 <tr>
-                                    <th>#ID Membro</th>                                
-                                    <th>Nome</th>                                
+                                    <th>#ID</th>                                
+                                    <th>Nome</th>
                                     <th>Função</th>
-                                    <th>Responsável</th>                                
-                                    <th>Ações</th>                                
+
+                                    <th>Opções</th>
                                 </tr>
                             </thead>
-                            <tbody>
-
-                            <td class="id">25</td>
-                            <td>Erlanio Freire Barros</td>
-                            <td>Orientador</td>
-                            <td>SIM</td>
-                            <td>
-                                <button class="btn btn-info col-md-3" data-toggle="modal" data-target="#cadastro-projeto"><i class="fa fa-plus"></i> Editar</button>
-                                <button class="btn btn-danger col-md-3" data-toggle="modal" data-target="#cadastro-projeto"><i class="fa fa-plus"></i> Excluir</button>
-                            </td>
-
-                            </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
 
 

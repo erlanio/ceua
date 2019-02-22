@@ -1,16 +1,18 @@
 $BASE_URL = "http://localhost/ceua/";
 
 $(document).ready(function () {
+    tabelaProjetos();
 
-//    $('.accordion').find('.accordion-toggle').click(function () {
-//        //Expand or collapse this panel
-//        $(this).next().slideToggle(250);
-//        //Hide the other panels
-//        $('.accordion-content').not($(this).next()).slideUp(400);
-//        //Turn the arrow
-//        $('.arrow-open').removeClass('arrow-open');
-//        $(this).find('.arrow').toggleClass('arrow-open');
-//    });
+    //ACORDION
+    $('.accordion').find('.accordion-toggle').click(function () {
+        //Expand or collapse this panel
+        $(this).next().slideToggle(250);
+        //Hide the other panels
+        $('.accordion-content').not($(this).next()).slideUp(400);
+        //Turn the arrow
+        $('.arrow-open').removeClass('arrow-open');
+        $(this).find('.arrow').toggleClass('arrow-open');
+    });
 
     $('#vinculo-outros').hide();
 
@@ -41,6 +43,7 @@ $(document).ready(function () {
 
     $('#box-1').click(function (e) {
         if ($("#box-1").is(':checked')) {
+            $("#vinculo").val(1).selectpicker('refresh');
             $.ajax({
                 url: $BASE_URL + 'Pessoa/buscar',
                 type: 'POST',
@@ -64,6 +67,7 @@ $(document).ready(function () {
                 });
             });
         } else {
+            $("#vinculo").val("selecione").selectpicker('refresh');
             $('#nome-responsavel').val("");
             $('#cpf_responsavel').val("");
             $('#email_responsavel').val("");
@@ -76,6 +80,8 @@ $(document).ready(function () {
 
 
     })
+
+
 
 
     $("#finalidade").change(function () {
@@ -151,15 +157,9 @@ $(document).ready(function () {
                 })
 
             }).done(function (data) {
-                notify("Dados salvos com sucesso!", "success");
-                $('#titulo-projeto').hide();
-                //Expand or collapse this panel
-                $("#equipe").next().slideToggle(250);
-                //Hide the other panels
-                $('.accordion-content').not($("#equipe").next()).slideUp(400);
-                //Turn the arrow
-                $('.arrow-open').removeClass('arrow-open');
-                $('#equipe').find('.arrow').toggleClass('arrow-open');
+
+                $('#atualizar-tabela-projetos').click();
+
             });
         }
 
@@ -319,9 +319,10 @@ $(document).ready(function () {
         treiqtotmpo = $('#treinamento-quanto-tempo').val()
         vinculo = $('#vinculo').val()
         outros_vinculo = $('#vinculo-form').val()
-        id_usuario =  $('#id_usuario').val();
-
-        if (cpf == "" || nome == "" || dpto == "" || instituicao == "" || telefone == "" || email == ""  || experiencia_previa == "" || lattes == "" || treinamento == "") {
+        id_usuario = $('#id_usuario').val();
+        id_projeto = $('#id_projeto').val();
+        console.log(id_projeto);
+        if (cpf == "" || nome == "" || dpto == "" || instituicao == "" || telefone == "" || email == "" || experiencia_previa == "" || lattes == "" || treinamento == "") {
             notify("Informe todos os dados para continuar!", "danger");
         } else {
 
@@ -332,7 +333,7 @@ $(document).ready(function () {
                 data: ({
                     'nome': nome,
                     'email': email,
-                    'cpf': cpf,                   
+                    'cpf': cpf,
                     'telefone': telefone,
                     'lattes': lattes,
                     'dpto': dpto,
@@ -343,12 +344,13 @@ $(document).ready(function () {
                     'treiqtotmpo': treiqtotmpo,
                     'outros_vinculo': outros_vinculo,
                     'id_pessoa': id_usuario,
-                    'vinculo': vinculo
+                    'vinculo': vinculo,
+                    'id_projeto': id_projeto,
 
                 })
 
             }).done(function (data) {
-                console.log(data);
+                $('#atualizar-tabela-membros').click();
             });
         }
 
@@ -397,116 +399,219 @@ $(document).ready(function () {
     });
 
 
+
+//TABELA MEMBROS
+    function criaTabelaMembros() {
+        if (($("#tabela-membros")).length) {
+            console.log($('#id_projeto').val());
+            var paramIdProjeto = $('#id_projeto').val();
+
+            var tabelaMembros = $('#tabela-membros').DataTable({
+                "ajax": {
+
+                    url: $BASE_URL + 'pessoa/getMembros/',
+                    type: 'GET',
+                    "data": {
+                        "id_projeto": paramIdProjeto
+                    }
+                },
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+
+
+
+            });
+
+            tabelaMembros.on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                } else {
+                    tabelaMembros.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+
+
+            $('#atualizar-tabela-membros').click(function () {
+                tabelaMembros.ajax.reload();
+            })
+        }
+    }
+
+
+    function excluirMembro(id) {
+        $.ajax({
+            url: $BASE_URL + 'pessoa/excluirMembro',
+            type: 'POST',
+            dataType: 'html',
+            data: ({
+                'id': id,
+            })
+
+        }).done(function (data) {
+            console.log(data);
+        });
+
+    }
+
+    //TABELA PROJETOS
+    function tabelaProjetos() {
+        if (($("#tabela-projetos")).length) {
+
+            var tabelaProjetos = $('#tabela-projetos').DataTable({
+                "ajax": {
+
+                    url: $BASE_URL + 'projeto/getProjetos/',
+                    type: 'GET',
+
+                },
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+
+
+
+            });
+
+            tabelaProjetos.on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                } else {
+                    tabelaProjetos.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+
+
+            $('#atualizar-tabela-projetos').click(function () {
+                tabelaProjetos.ajax.reload();
+            })
+        }
+    }
+
+
+
+
 });
 
 // Fim dO READY
 
-if (($("#tabela-categorias")).length) {
 
 
-    var tabelaCategorias = $('#tabela-categorias').DataTable({
-        "ajax": {
 
-            url: $BASE_URL + 'Categorias/getcategorias',
-            type: 'GET',
+function excluirProjeto($id) {
 
-        },
 
-        "language": {
-            "sEmptyTable": "Nenhum registro encontrado",
-            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-            "sInfoPostFix": "",
-            "sInfoThousands": ".",
-            "sLengthMenu": "_MENU_ resultados por página",
-            "sLoadingRecords": "Carregando...",
-            "sProcessing": "Processando...",
-            "sZeroRecords": "Nenhum registro encontrado",
-            "sSearch": "Pesquisar",
-            "oPaginate": {
-                "sNext": "Próximo",
-                "sPrevious": "Anterior",
-                "sFirst": "Primeiro",
-                "sLast": "Último"
+
+    bootbox.confirm({
+        message: "Tem certeza que deseja deletar este Projeto?",
+        buttons: {
+            confirm: {
+                label: 'Sim',
+                className: 'btn-success'
             },
-            "oAria": {
-                "sSortAscending": ": Ordenar colunas de forma ascendente",
-                "sSortDescending": ": Ordenar colunas de forma descendente"
+            cancel: {
+                label: 'Não',
+                className: 'btn-danger enviar'
+            }
+        },
+        callback: function (result) {
+            if (result == true) {
+
+                $.ajax({
+                    url: $BASE_URL + 'projeto/excluir',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: ({
+                        'id': $id,
+                    })
+
+                }).done(function (data) {
+                    notify("Projeto excluído com sucesso!", "danger");
+                    $('#atualizar-tabela-projetos').click();
+                });
             }
         }
-
-
-
-    });
-
-    tabelaCategorias.on('click', 'tr', function () {
-        if ($(this).hasClass('selected')) {
-            $(this).removeClass('selected');
-        } else {
-            tabelaCategorias.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-        }
-    });
-
-    $('#atualizar-tabela-categorias').click(function () {
-        tabelaCategorias.ajax.reload();
-    })
-
-
-
-
-
-    $('#img-categoria').on('change', function () {
-
-        var fr = new FileReader;
-
-        fr.onload = function () {
-            var img = new Image;
-
-            img.onload = function () {
-
-                if (img.width != 250 && this.height != 250) {
-                    $('#retorno-imagem-categoria').addClass("alert alert-danger");
-                    $('#retorno-imagem-categoria').html("Ops! A imagem deve conter as seguintes dimensões: <br> Largura: 250px<br>Altura: 250px;");
-                } else {
-                    $('#btn-salvar-categoria').removeAttr('disabled');
-
-                }
-            };
-
-            img.src = fr.result;
-        };
-
-        fr.readAsDataURL(this.files[0]);
-
     });
 
 
 
-    $('#btn-salvar-categoria').click(function () {
 
-        $nome_categoria = $('#nome-categoria').val();
-        $desc_categoria = $('#desc-categoria').val();
-
-        if ($nome_categoria == null || $desc_categoria == "") {
-            $('#retorno-salvar-categoria').addClass("alert alert-danger");
-            $('#retorno-salvar-categoria').html("Ops! Preencha todos os dados para continuar!");
-        } else {
-            $('#form-categoria').ajaxForm({
-                target: '#retorno-salvar-categoria' // o callback serÃ¡ no elemento com o id #visualizar
-            }).submit();
-            $('#atualizar-tabela-categorias').click();
-            $('#nome-categoria').val("");
-            $('#desc-categoria').val("");
-            $('#img-categoria').val("");
-
-            notify("Salvo com sucesso!", "success");
-        }
-
-    })
 
 }
+
+function editarProjeto(id) {
+    alert(id);
+}
+
+
+
+$('#img-categoria').on('change', function () {
+
+    var fr = new FileReader;
+
+    fr.onload = function () {
+        var img = new Image;
+
+        img.onload = function () {
+
+            if (img.width != 250 && this.height != 250) {
+                $('#retorno-imagem-categoria').addClass("alert alert-danger");
+                $('#retorno-imagem-categoria').html("Ops! A imagem deve conter as seguintes dimensões: <br> Largura: 250px<br>Altura: 250px;");
+            } else {
+                $('#btn-salvar-categoria').removeAttr('disabled');
+
+            }
+        };
+
+        img.src = fr.result;
+    };
+
+    fr.readAsDataURL(this.files[0]);
+
+});
+
 
 
 

@@ -13,26 +13,24 @@ class Projeto extends CI_Controller {
 
     public function index() {
         // $data['categorias'] = $this->categoria->getCategorias();
-
+        $data['areas'] = $this->projeto->areas();
+        $data['vinculos'] = $this->projeto->vinculos();
+        $data['finalidades'] = $this->projeto->finAcademica();
         $this->load->view('admin/header');
         $this->load->view('admin/menu');
-        $this->load->view('admin/projeto');
+        $this->load->view('admin/projeto', $data);
     }
 
     public function novo() {
         $data['areas'] = $this->projeto->areas();
         $data['vinculos'] = $this->projeto->vinculos();
         $data['finalidades'] = $this->projeto->finAcademica();
-        
+
 
         $this->load->view('admin/header');
         $this->load->view('admin/menu');
         $this->load->view('admin/novo-projeto', $data);
         $this->load->view('admin/modal-add-membros');
-    }
-    
-    public function tabelaMembros() {
-        
     }
 
     public function selectedSubArea() {
@@ -58,13 +56,48 @@ class Projeto extends CI_Controller {
         $data['dt_ini'] = $this->input->post('dt_ini');
         $data['dt_cadastro'] = date('Y-m-d');
         $data['id_pessoa'] = $this->session->userdata('usuario')->id_pessoa;
-        $data['dt_fim'] = $this->input->post('dt_fim');             
-        
-        $this->projeto->salvar($data);
+        $data['dt_fim'] = $this->input->post('dt_fim');
+        echo $this->projeto->salvar($data);
+    }
+
+    public function getProjetos() {
+        $data2['projetos'] = $this->projeto->getProjetos();
+
+        // Datatables Variables
+        $draw = intval($this->input->get("draw"));
+        $start = intval($this->input->get("start"));
+        $length = intval($this->input->get("length"));
+        $data = array();
+        foreach ($data2['projetos'] as $r) {
+            $data[] = array(
+                $r->id_projeto,
+                $r->titulo,
+                $r->opcoes = "<div class='col-md-12'><button class='btn btn-info col-md-5'
+                    onclick=\"editarProjeto('$r->id_projeto');\"><i class='fa fa-close'></i> Editar</button>
+                    <button class='btn btn-danger col-md-5'
+                    onclick=\"excluirProjeto('$r->id_projeto');\"><i class='fa fa-close'></i> Excluir</button></div>
+",
+            );
+        }
+        $output = array(
+            "draw" => $draw,
+            "recordsTotal" => "",
+            "recordsFiltered" => "",
+            "data" => $data
+        );
+        echo json_encode($output);
+        exit();
+    }
+
+    
+    
+    public function excluir() {
+        $id = $this->input->post('id');
+        $this->projeto->excluir($id);
     }
     
     
-
+    
     public function salvarImagem() {
         $pasta = "assets/img/categorias/";
         $tipoArquivos = array(".jpg", ".jpeg", ".gif", ".png", ".bmp");

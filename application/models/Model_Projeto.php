@@ -58,10 +58,20 @@ class Model_Projeto extends CI_Model {
     }
 
     public function salvar($data) {
-        return $this->db->insert('projeto', $data);
+       $this->db->insert('projeto', $data);
+       return $this->db->insert_id();
     }
     
     public function salvarMembro($data) {
         return $this->db->insert('equipe', $data);
+    }
+    
+    public function getProjetos() {
+        $id = $this->session->userdata('usuario')->id_pessoa;
+        return $this->db->query("select * from projeto where id_pessoa = $id")->result();
+    }
+    public function excluir($id) {
+        $this->db->where('id_projeto', $id);
+        $this->db->delete('projeto');
     }
 }

@@ -89,9 +89,9 @@
 
                     <div class="row">
                         <div class="form-group col-md-12" id="select-vinculo">
-                            <label>Vínculo com a Instituição:</label>
-                            <select class="form-control selectpicker" id="vinculo">
-
+                            <label>Papel do membro:</label>
+                            <select class="form-control" id="vinculo">
+                                <option value="selecione">Selecione...</option>
                                 <?php
                                 foreach ($vinculos as $vinculo) {
                                     $id = $vinculo->id_vinculo;
@@ -108,22 +108,6 @@
                             <input type="text" class="form-control" id="vinculo-form">
                         </div>
                     </div>
-                    <pre class='xdebug-var-dump' dir='ltr'>
-<small>C:\wamp64\www\ceua\application\controllers\Pessoa.php:87:</small>
-<b>array</b> <i>(size=12)</i>
-  'nome_pessoa' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'ERLANIO FREIRE BARROS'</font> <i>(length=21)</i>
-  'telefone' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'88996042686'</font> <i>(length=11)</i>
-  'cpf_pessoa' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'07172603303'</font> <i>(length=11)</i>
-  'email_pessoa' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'erlanio.freire@urca.br'</font> <i>(length=22)</i>
-  'lattes' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'$data[&#39;lattes&#39;] = $this-&gt;input-&gt;post(&#39;lattes&#39;);'</font> <i>(length=47)</i>
-  'departamento' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'DTI'</font> <i>(length=3)</i>
-  'instituicao' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'UNIVERSIDADE REGIONAL DO CARIRI '</font> <i>(length=32)</i>
-  'xp_previa' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'S'</font> <i>(length=1)</i>
-  'qt_tmpo_previa' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>''</font> <i>(length=0)</i>
-  'treinamento' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'S'</font> <i>(length=1)</i>
-  'qt_tmpo_treinamento' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>''</font> <i>(length=0)</i>
-  'outros' <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>''</font> <i>(length=0)</i>
-</pre>
                      <button class="btn btn-success offset-4 col-md-4" id="salvar-equipe">Salvar Equipe</button>
                 </form>
             </div>

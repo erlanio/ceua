@@ -86,7 +86,7 @@ class Pessoa extends CI_Controller {
         $data2['qt_tmpo_treinamento'] = strtoupper($this->input->post('treiqtotmpo'));
         $data2['outros'] = strtoupper($this->input->post('outros_vinculo'));
         $data2['id_vinculo'] = strtoupper($this->input->post('vinculo'));
-
+        $data2['id_projeto'] = $this->input->post('id_projeto');
         $id_pessoa = $this->input->post('id_pessoa');
         if ($id_pessoa == "") {
             $id_pessoa = $this->pessoa->salvarMembro($data);
@@ -97,8 +97,6 @@ class Pessoa extends CI_Controller {
             $this->projeto->salvarMembro($data2);
         }
     }
-    
-    
 
     public function lastInsert() {
         echo $this->pessoa->lastInsert();
@@ -113,4 +111,34 @@ class Pessoa extends CI_Controller {
         $this->load->view('admin/meus_dados', $data);
     }
 
+    public function getMembros() {
+            $id_projeto = $this->input->get('id_projeto');
+            
+            $data2['membros'] = $this->pessoa->getMembros($id_projeto);
+            // Datatables Variables
+            $draw = intval($this->input->get("draw"));
+            $start = intval($this->input->get("start"));
+            $length = intval($this->input->get("length"));
+            $data = array();
+            foreach ($data2['membros'] as $r) {
+                $data[] = array(
+                    $r->id_pessoa,
+                    $r->nome_pessoa,
+                    $r->desc_vinculo,
+                    $r->opcoes = "<div class='col-md-12'>
+                    <button class='btn btn-danger col-md-5'
+                    onclick=\"excluirMembro('$r->id_equipe');\"><i class='fa fa-close'></i> Excluir</button></div>
+",
+                );
+            }
+            $output = array(
+                "draw" => $draw,
+                "recordsTotal" => "",
+                "recordsFiltered" => "",
+                "data" => $data
+            );
+            echo json_encode($output);
+            exit();
+        }
+    
 }
