@@ -67,14 +67,21 @@ class Projeto extends CI_Controller {
         $draw = intval($this->input->get("draw"));
         $start = intval($this->input->get("start"));
         $length = intval($this->input->get("length"));
+        $url = base_url('projeto/administrar');
         $data = array();
         foreach ($data2['projetos'] as $r) {
             $data[] = array(
                 $r->id_projeto,
                 $r->titulo,
-                $r->opcoes = "<div class='col-md-12'><button class='btn btn-info col-md-5'
+                $r->opcoes = "<div class='col-md-12'>
+                    <button class='btn btn-success col-md-3'
+                    onclick=\"adminProjeto('$r->id_projeto');\"><i class='fa fa-close'></i> Administrar</button>
+
+
+                    <button class='btn btn-info col-md-3'
                     onclick=\"editarProjeto('$r->id_projeto');\"><i class='fa fa-close'></i> Editar</button>
-                    <button class='btn btn-danger col-md-5'
+                    
+                    <button class='btn btn-danger col-md-3'
                     onclick=\"excluirProjeto('$r->id_projeto');\"><i class='fa fa-close'></i> Excluir</button></div>
 ",
             );
@@ -89,15 +96,26 @@ class Projeto extends CI_Controller {
         exit();
     }
 
-    
-    
     public function excluir() {
         $id = $this->input->post('id');
         $this->projeto->excluir($id);
     }
-    
-    
-    
+
+    public function administrar() {
+        $id = $this->uri->segment(3);
+        $data['areas'] = $this->projeto->areas();
+        $data['vinculos'] = $this->projeto->vinculos();
+        $data['finalidades'] = $this->projeto->finAcademica();
+        $data['numMembros'] = $this->projeto->numMembros($id);
+        $data['especies'] = $this->projeto->getEspecies();
+        
+        $this->load->view('admin/header');
+        $this->load->view('admin/menu');
+        $this->load->view('admin/admin-projeto', $data);
+        $this->load->view('admin/modal-add-membros', $data);
+        $this->load->view('admin/modal-add-animal-experimental', $data);
+    }
+
     public function salvarImagem() {
         $pasta = "assets/img/categorias/";
         $tipoArquivos = array(".jpg", ".jpeg", ".gif", ".png", ".bmp");

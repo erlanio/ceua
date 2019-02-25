@@ -2,6 +2,7 @@ $BASE_URL = "http://localhost/ceua/";
 
 $(document).ready(function () {
     tabelaProjetos();
+    criaTabelaMembros();
 
     //ACORDION
     $('.accordion').find('.accordion-toggle').click(function () {
@@ -171,6 +172,19 @@ $(document).ready(function () {
         keepStatic: true
     });
 
+//MASCARA MODELO ANIMAL EXPERIMENTO
+    $('#peso').mask('#.##0', {reverse: true});
+    $('#idade').mask('0000', {reverse: true});
+    $('#animais-por-grupo').mask('0000', {reverse: true});
+    $('#num-grupos').mask('0000', {reverse: true});
+    $('#qtdM').mask('0000', {reverse: true});
+    $('#qtdF').mask('0000', {reverse: true});
+    $('#total').mask('0000', {reverse: true});
+
+
+
+//MODELO ANIMAL EXPERIMENTO
+
 
     $("#rg").inputmask({
         mask: ["9999999999-9", ],
@@ -305,6 +319,12 @@ $(document).ready(function () {
     });
 
 
+    $('#membros').click(function () {
+        $('#bloco-tabela-membros').attr("hidden", false);
+        $('#tabela-membros').css("width", '100%');
+    })
+
+
     $('#salvar-equipe').click(function () {
         cpf = $('#cpf_responsavel').val()
         nome = $('#nome-responsavel').val()
@@ -321,8 +341,7 @@ $(document).ready(function () {
         outros_vinculo = $('#vinculo-form').val()
         id_usuario = $('#id_usuario').val();
         id_projeto = $('#id_projeto').val();
-        console.log(id_projeto);
-        if (cpf == "" || nome == "" || dpto == "" || instituicao == "" || telefone == "" || email == "" || experiencia_previa == "" || lattes == "" || treinamento == "") {
+        if (cpf == "" || nome == "" || dpto == "" || instituicao == "" || telefone == "" || email == "" || experiencia_previa == "" || lattes == "" || treinamento == "" || vinculo == "selecione") {
             notify("Informe todos os dados para continuar!", "danger");
         } else {
 
@@ -350,13 +369,38 @@ $(document).ready(function () {
                 })
 
             }).done(function (data) {
-                $('#atualizar-tabela-membros').click();
+                console.log(data);
+                if (data == 1) {
+                    notify("Membro adicionado com sucesso!", 'success');
+                    $('#atualizar-tabela-membros').click();
+                    cpf = $('#cpf_responsavel').val("")
+                    nome = $('#nome-responsavel').val("")
+                    instituicao = $('#instituicao_responsavel').val("")
+                    dpto = $('#dpto_responsavel').val("")
+                    telefone = $('#telefone').val("")
+                    email = $('#email_responsavel').val("")
+                    xptmpo = $('#xp-quanto-tempo').val("")
+                    lattes = $('#lattes_responsavel').val("")
+
+                    treiqtotmpo = $('#treinamento-quanto-tempo').val("")
+                    vinculo = $('#vinculo').val("selecione")
+                    outros_vinculo = $('#vinculo-form').val("")
+                    id_usuario = $('#id_usuario').val();
+                    id_projeto = $('#id_projeto').val();
+
+                    $("#box-1").prop("checked", false);
+                    atualizarNumMembros("+");
+                } else {
+                    notify("Essa pessoa já faz parte deste projeto!", 'danger');
+                }
+
             });
         }
 
 
 
     })
+
 
     $('#cpf_responsavel').keyup(function () {
         $tamanho = $('#cpf_responsavel').val().length;
@@ -403,8 +447,8 @@ $(document).ready(function () {
 //TABELA MEMBROS
     function criaTabelaMembros() {
         if (($("#tabela-membros")).length) {
-            console.log($('#id_projeto').val());
-            var paramIdProjeto = $('#id_projeto').val();
+
+            var paramIdProjeto = 68;
 
             var tabelaMembros = $('#tabela-membros').DataTable({
                 "ajax": {
@@ -457,22 +501,6 @@ $(document).ready(function () {
                 tabelaMembros.ajax.reload();
             })
         }
-    }
-
-
-    function excluirMembro(id) {
-        $.ajax({
-            url: $BASE_URL + 'pessoa/excluirMembro',
-            type: 'POST',
-            dataType: 'html',
-            data: ({
-                'id': id,
-            })
-
-        }).done(function (data) {
-            console.log(data);
-        });
-
     }
 
     //TABELA PROJETOS
@@ -537,7 +565,53 @@ $(document).ready(function () {
 
 // Fim dO READY
 
+function deletarMembro(id) {
 
+    bootbox.confirm({
+        message: "Tem certeza que deseja deletar este Projeto?",
+        buttons: {
+            confirm: {
+                label: 'Sim',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'Não',
+                className: 'btn-danger enviar'
+            }
+        },
+        callback: function (result) {
+            if (result == true) {
+
+                $.ajax({
+                    url: $BASE_URL + 'pessoa/excluirMembro',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: ({
+                        'id': id,
+                    })
+
+                }).done(function (data) {
+                    $('#atualizar-tabela-membros').click();
+                    atualizarNumMembros("-");
+                    notify("Membro excluido com sucesso!", 'success');
+                });
+            }
+        }
+    });
+
+}
+
+
+function atualizarNumMembros($operacao) {
+    $numMembros = $('#num-membros').html();
+    $numMembrosI = parseInt($numMembros);
+    if ($operacao == "+") {
+        $('#num-membros').html($numMembrosI += 1);
+    } else {
+        $('#num-membros').html($numMembros -= 1);
+    }
+
+}
 
 
 function excluirProjeto($id) {
@@ -575,15 +649,30 @@ function excluirProjeto($id) {
         }
     });
 
-
-
-
-
 }
+
 
 function editarProjeto(id) {
     alert(id);
 }
+
+function adminProjeto($id) {
+    location.href = $BASE_URL + 'projeto/administrar/' + $id;
+}
+
+
+function calcularTotal() {
+    if ($('#qtdM').val() != "" && $('#qtdF').val() != "NaN") {
+        $total = parseInt($('#qtdM').val()) + parseInt($('#qtdF').val());
+        $('#total').val($total);
+    }
+
+}
+
+
+
+
+
 
 
 
@@ -611,11 +700,6 @@ $('#img-categoria').on('change', function () {
     fr.readAsDataURL(this.files[0]);
 
 });
-
-
-
-
-
 
 
 function notify($mensagem, $tipo) {

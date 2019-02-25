@@ -74,4 +74,18 @@ class Model_Projeto extends CI_Model {
         $this->db->where('id_projeto', $id);
         $this->db->delete('projeto');
     }
+    
+    public function numMembros($id) {
+        $this->db->where("id_projeto", $id);
+        return $this->db->get('equipe')->num_rows();
+    }
+    
+    public function verificaMembro($id) {
+        $this->db->where('id_pessoa', $id);
+        return $this->db->get('equipe')->num_rows();
+    }
+    
+    public function getEspecies() {
+        return $this->db->get('especies')->result();
+    }
 }

@@ -92,9 +92,16 @@ class Pessoa extends CI_Controller {
             $id_pessoa = $this->pessoa->salvarMembro($data);
             $data2['id_pessoa'] = $id_pessoa;
             $this->projeto->salvarMembro($data2);
+            echo '1';
         } else {
-            $data2['id_pessoa'] = $id_pessoa;
-            $this->projeto->salvarMembro($data2);
+            
+            if ($this->projeto->verificaMembro($id_pessoa) == 0) {
+                $data2['id_pessoa'] = $id_pessoa;
+                $this->projeto->salvarMembro($data2);
+                 echo '1';
+            } else {
+                echo '2';
+            }
         }
     }
 
@@ -112,33 +119,37 @@ class Pessoa extends CI_Controller {
     }
 
     public function getMembros() {
-            $id_projeto = $this->input->get('id_projeto');
-            
-            $data2['membros'] = $this->pessoa->getMembros($id_projeto);
-            // Datatables Variables
-            $draw = intval($this->input->get("draw"));
-            $start = intval($this->input->get("start"));
-            $length = intval($this->input->get("length"));
-            $data = array();
-            foreach ($data2['membros'] as $r) {
-                $data[] = array(
-                    $r->id_pessoa,
-                    $r->nome_pessoa,
-                    $r->desc_vinculo,
-                    $r->opcoes = "<div class='col-md-12'>
+        $id_projeto = 68; //$this->input->get('id_projeto');
+
+        $data2['membros'] = $this->pessoa->getMembros($id_projeto);
+        // Datatables Variables
+        $draw = intval($this->input->get("draw"));
+        $start = intval($this->input->get("start"));
+        $length = intval($this->input->get("length"));
+        $data = array();
+        foreach ($data2['membros'] as $r) {
+            $data[] = array(
+                $r->id_pessoa,
+                $r->nome_pessoa,
+                $r->desc_vinculo,
+                $r->opcoes = "<div class='col-md-12'>
                     <button class='btn btn-danger col-md-5'
-                    onclick=\"excluirMembro('$r->id_equipe');\"><i class='fa fa-close'></i> Excluir</button></div>
-",
-                );
-            }
-            $output = array(
-                "draw" => $draw,
-                "recordsTotal" => "",
-                "recordsFiltered" => "",
-                "data" => $data
+                    onclick=\"deletarMembro('$r->id_equipe');\"><i class='fa fa-close'></i> Excluir</button></div>",
             );
-            echo json_encode($output);
-            exit();
         }
-    
+        $output = array(
+            "draw" => $draw,
+            "recordsTotal" => "",
+            "recordsFiltered" => "",
+            "data" => $data
+        );
+        echo json_encode($output);
+        exit();
+    }
+
+    public function excluirMembro() {
+        $id = $this->input->post('id');
+        return $this->pessoa->excluirMembro($id);
+    }
+
 }
