@@ -401,6 +401,14 @@ $(document).ready(function () {
 
     })
 
+    $('#especie').change(function () {
+        $id_especie = $('#especie').val();
+        nome = $('#especie :selected').text();
+        $('#dados-especie').attr("hidden", false);
+
+    })
+
+
 
     $('#cpf_responsavel').keyup(function () {
         $tamanho = $('#cpf_responsavel').val().length;
@@ -559,6 +567,53 @@ $(document).ready(function () {
     }
 
 
+    $('#proc3').click(function (e) {
+        if ($("#proc3").is(':checked')) {
+            $('#num-protoco-sisbio').attr("hidden", false);
+            $('#metodo-captura').attr("hidden", false);
+        } else {
+            $('#num-protoco-sisbio').attr("hidden", true);
+            $('#metodo-captura').attr("hidden", true);
+        }
+    })
+
+    $('#proc5').click(function (e) {
+        if ($("#proc5").is(':checked')) {
+            $('#outro-procedimento-bloco').attr("hidden", false);
+
+        } else {
+            $('#outro-procedimento-bloco').attr("hidden", true);
+
+        }
+    })
+
+    $('#modificado').click(function (e) {
+        if ($("#modificado").is(':checked')) {
+            $('#bloco-qual-notificacao').attr("hidden", false);
+        } else {
+            $('#bloco-qual-notificacao').attr("hidden", true);
+        }
+    })
+
+    $('#aproveitamento').change(function () {
+        $aproveitamento = $('#aproveitamento').val();
+        if($aproveitamento == "n"){
+            $('#como').attr("hidden", true);
+        }else{
+            $('#como').attr("hidden", false);
+        }
+    })
+    
+    $('#racao-comercial').change(function () {
+        $racao = $('#racao-comercial').val();
+        if($racao == "s"){
+            $('#racao-especial-bloco').attr("hidden", true);
+            $('#qual-racao').attr("hidden", false);
+        }else{
+            $('#qual-racao').attr("hidden", true);
+            $('#racao-especial-bloco').attr("hidden", false);
+        }
+    })
 
 
 });

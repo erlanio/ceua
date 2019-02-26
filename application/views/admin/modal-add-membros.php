@@ -13,9 +13,9 @@
                     <div class="boxes">
                         <input type="checkbox" id="box-1">
                         <label for="box-1">Sou o responsável pela pesquisa</label>
-
                     </div>
-
+                    
+                   
                     <input type="hidden" id="id_usuario" value="<?php echo $this->session->userdata('usuario')->id_pessoa; ?>">
 
                     <div class="form-group">

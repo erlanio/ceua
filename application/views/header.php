@@ -12,6 +12,7 @@
         <script src="<?php echo base_url('assets/js/'); ?>bootstrap.min.js"></script>
         <script src="<?php echo base_url('assets/js/jquery.inputmask.bundle.js'); ?>"></script>    
         <script src="<?php echo base_url('assets/js/validacoes.js'); ?>"></script>
+        <script src="<?php echo base_url('assets/js/'); ?>/jquery.mask.js"></script>
         <style>
             @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 

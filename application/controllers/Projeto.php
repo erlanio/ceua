@@ -108,6 +108,7 @@ class Projeto extends CI_Controller {
         $data['finalidades'] = $this->projeto->finAcademica();
         $data['numMembros'] = $this->projeto->numMembros($id);
         $data['especies'] = $this->projeto->getEspecies();
+        $data['procedencias'] = $this->projeto->getProcedencias();
         
         $this->load->view('admin/header');
         $this->load->view('admin/menu');

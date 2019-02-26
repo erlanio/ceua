@@ -88,4 +88,9 @@ class Model_Projeto extends CI_Model {
     public function getEspecies() {
         return $this->db->get('especies')->result();
     }
+    
+    public function getProcedencias() {
+        $this->db->order_by('desc_procedencia', 'asc');
+        return $this->db->get('procedencia')->result();
+    }
 }
