@@ -7,6 +7,7 @@ class Projeto extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Model_Projeto', 'projeto');
+        $this->load->helper('uteis_helper');
         if ($this->session->userdata('usuario') == null)
             redirect('Login');
     }
@@ -109,12 +110,79 @@ class Projeto extends CI_Controller {
         $data['numMembros'] = $this->projeto->numMembros($id);
         $data['especies'] = $this->projeto->getEspecies();
         $data['procedencias'] = $this->projeto->getProcedencias();
-        
+
         $this->load->view('admin/header');
         $this->load->view('admin/menu');
         $this->load->view('admin/admin-projeto', $data);
         $this->load->view('admin/modal-add-membros', $data);
+
+        $this->load->view('admin/tabela-especies');
         $this->load->view('admin/modal-add-animal-experimental', $data);
+    }
+
+    public function salvarAnimalExperimental() {
+
+        $data['id_especie'] = $this->input->post('especie');
+        $data['id_projeto'] = $this->input->post('id_projeto');
+        $data['linhagem'] = $this->input->post('linhagem');
+        $data['idade'] = $this->input->post('idade');
+        $data['peso'] = $this->input->post('peso');
+        $data['num_animais_grupo'] = $this->input->post('numAnimaisGrupo');
+        $data['num_grupos'] = $this->input->post('numGrupos');
+        $data['qtd_mas'] = $this->input->post('qtdM');
+        $data['qtd_fem'] = $this->input->post('qtdF');
+        $data['criterio'] = $this->input->post('criterio');
+        $data['num_sisbio'] = $this->input->post('sisbio');
+        $data['metodo_captura'] = $this->input->post('captura');
+        $data['procedencia_outras'] = $this->input->post('qualprocedimento');
+        $data['num_ctnbio'] = $this->input->post('numctnbio');
+        $data['aprv_aniamais'] = $this->input->post('aproveitamento');
+        $data['aprv_animais_como'] = $this->input->post('qualaproveitamento');
+        $data['manejo_animais'] = $this->input->post('manejo');
+        $data['tipo_agua'] = $this->input->post('agua');
+        $data['racao_comercia'] = $this->input->post('racaoComercial');
+        $data['qual_racao'] = $this->input->post('qualRacao');
+        $data['racao_especial'] = $this->input->post('racaoEspecial');
+        $data['procedencia'] = $this->input->post('procedencia');
+        $data['id_pessoa'] = $this->session->userdata('usuario')->id_pessoa;
+        $data['dt_cadastro'] = date('Y-m-d');
+        $data['dt_update'] = date('Y-m-d');
+
+        echo $this->projeto->salvarAnimalExperimental($data);
+    }
+
+    public function getModeloAnimal() {
+        $id_projeto = $this->input->get('id_projeto');
+        $data2['modeloAnimal'] = $this->projeto->getModeloAnimal($id_projeto);
+
+        // Datatables Variables
+        $draw = intval($this->input->get("draw"));
+        $start = intval($this->input->get("start"));
+        $length = intval($this->input->get("length"));
+        $data = array();
+        foreach ($data2['modeloAnimal'] as $r) {
+            $data[] = array(
+                $r->id_modelo_animal,
+                $r->nome_especie,
+                $r->nome_pessoa,
+                data_br($r->dt_cadastro),
+                $r->opcoes = "<div class='col-md-12'>
+                    <button class='btn btn-info col-md-5'
+                    onclick=\"editarModeloAnimal('$r->id_modelo_animal');\"><i class='fa fa-close'></i> Editar</button>
+                    
+                    <button class='btn btn-danger col-md-5'
+                    onclick=\"excluirProjeto('$r->id_modelo_animal');\"><i class='fa fa-close'></i> Excluir</button></div>
+",
+            );
+        }
+        $output = array(
+            "draw" => $draw,
+            "recordsTotal" => "",
+            "recordsFiltered" => "",
+            "data" => $data
+        );
+        echo json_encode($output);
+        exit();
     }
 
     public function salvarImagem() {

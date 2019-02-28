@@ -1,5 +1,3 @@
-
-
 <section class='statis text-center'>
     <div class="container-fluid">
         <div class="row">
@@ -12,7 +10,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3" data-toggle="modal" data-target="#modal-add-animal-experimental">
+            <div class="col-md-3" data-toggle="modal" data-target="#modal-especies">
                 <div class="box box-dashboard pointer">
                     <i class="fa fa-paw"></i>
                     <h3></h3>

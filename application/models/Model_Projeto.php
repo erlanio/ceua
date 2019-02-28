@@ -93,4 +93,12 @@ class Model_Projeto extends CI_Model {
         $this->db->order_by('desc_procedencia', 'asc');
         return $this->db->get('procedencia')->result();
     }
+    
+    public function salvarAnimalExperimental($data) {
+        return $this->db->insert('modelo_animal', $data);   
+    }
+    
+    public function getModeloAnimal($id_projeto) {
+        return $this->db->query("select * from modelo_animal as ma join especies as es on es.id_especie = ma.id_especie join projeto as p on p.id_projeto = ma.id_projeto join pessoa as pes on pes.id_pessoa = ma.id_pessoa where ma.id_projeto = $id_projeto")->result();
+    }
 }

@@ -77,7 +77,7 @@
 
                 <div class="form-group col-md-12">
                     <label>Qual o critério utilizado para definir a amostra, e qual o planejamento estatístico: </label>
-                    <input type="text" class="form-control" id="metodo">
+                    <input type="text" class="form-control" id="criterio">
                 </div>
 
       <hr>
@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="col-md-6" id="bloco-qual-notificacao" hidden="">
-                            <input type="text" class="form-control" id="qualnotificacao" placeholder="Número de protocolo CTNBio">
+                            <input type="text" class="form-control" id="numctnbio" placeholder="Número de protocolo CTNBio">
                         </div>
                     </div>
                 </div>
@@ -151,14 +151,14 @@
 
                     <div class="col-md-6" id="como">
                         <label>Como:</label>
-                        <input type="text" class="form-control" id="qualnotificacao" placeholder="Como">
+                        <input type="text" class="form-control" id="qualaproveitamento" placeholder="Como">
                     </div>
                 </div>
       <hr>
                 <div class="col-md-12 row">
                     <div class="col-md-12">
                         <label>Número de Animais/Parcela Experimental (Gaiola, Viveiro, Aquário, etc.) Descrever o manejo (ambiente, forração, Lotação - Número de animais/área, Exaustão do ar: sim ou não, Local onde será mantido o animal etc.):</label>
-                        <textarea class="form-control" rows="4"></textarea>
+                        <textarea class="form-control" rows="4" id="manejo"></textarea>
 
                     </div>
                 </div><br>
@@ -191,6 +191,9 @@
                         <label>Especial:</label>
                         <input type="text" class="form-control" id="racaoespecial">
                     </div>
+                    
+                    <button class="btn btn-success offset-md-4 col-md-4" onclick="salvarAnimal()">Salvar</button>
+                    
                 </div>
 
             </div>
