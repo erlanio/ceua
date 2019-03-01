@@ -5,6 +5,11 @@ $(document).ready(function () {
     criaTabelaMembros();
     criaTabelaEspecies();
 
+    $('#add-especie').click(function () {
+        $('#id_modelo_animal').val("n");
+        limparCamposAnimal();
+    })
+
     //ACORDION
     $('.accordion').find('.accordion-toggle').click(function () {
         //Expand or collapse this panel
@@ -99,7 +104,7 @@ $(document).ready(function () {
             })
 
         }).done(function (data) {
-            console.log(data);
+
             $('#titulo-acordion').hide();
             $("#subfinalidade").html(data).selectpicker('refresh');
         });
@@ -370,7 +375,7 @@ $(document).ready(function () {
                 })
 
             }).done(function (data) {
-                console.log(data);
+
                 if (data == 1) {
                     notify("Membro adicionado com sucesso!", 'success');
                     $('#atualizar-tabela-membros').click();
@@ -709,7 +714,7 @@ function excluirProjeto($id) {
 
 
 function editarProjeto(id) {
-    
+
 }
 
 function adminProjeto($id) {
@@ -781,6 +786,14 @@ function salvarAnimal() {
 
     }
 
+    if ($('#proc5').is(':checked')) {
+        if ($procedencia == "") {
+            $procedencia = $procedencia + "Outros";
+        } else {
+            $procedencia = $procedencia + ", Outros";
+        }
+
+    }
 
 
 
@@ -789,6 +802,7 @@ function salvarAnimal() {
         type: 'POST',
         dataType: 'html',
         data: ({
+            'id_modelo_animal': $('#id_modelo_animal').val(),
             'id_projeto': $('#id_projeto').val(),
             'especie': especie,
             'linhagem': linhagem,
@@ -814,31 +828,12 @@ function salvarAnimal() {
         })
 
     }).done(function (data) {
+
         if (data == true) {
             notify("Salvo com sucesso", "success");
             $('#atualizar-tabela-especies').click();
-            $('#modal-add-animal-experimental').modal('hide');            
-            $('#especie').val("");
-            $('#linhagem').val("");
-            $('#idade').val("");
-            $('#peso').val("");
-            $('#animais-por-grupo').val("");
-            $('#num-grupos').val("");
-            $('#qtdM').val("");
-            $('#qtdF').val("");
-            $('#criterio').val("");
-            //FALTA PROCEDENCIA
-            $('#sisbio').val("");
-            $('#captura').val("");
-            $('#qualprocedimento').val("");
-            $('#numctnbio').val("");
-            $('#aproveitamento').val("");
-            $('#qualaproveitamento').val("");
-            $('#manejo').val("");
-            $('#agua').val("");
-            $('#racao-comercial').val("");
-            $('#qualracao').val("");
-            $('#racaoespecial').val("");
+            $('#modal-add-animal-experimental').modal('hide');
+            limparCamposAnimal();
         } else {
             notify("Erro ao tentar salvar!", "danger");
         }
@@ -846,11 +841,112 @@ function salvarAnimal() {
 
 }
 
+function limparCamposAnimal() {
+    $('#especie').val("");
+    $('#linhagem').val("");
+    $('#idade').val("");
+    $('#peso').val("");
+    $('#animais-por-grupo').val("");
+    $('#num-grupos').val("");
+    $('#qtdM').val("");
+    $('#qtdF').val("");
+    $('#criterio').val("");
+    //FALTA PROCEDENCIA
+    $('#sisbio').val("");
+    $('#captura').val("");
+    $('#qualprocedimento').val("");
+    $('#numctnbio').val("");
+    $('#aproveitamento').val("");
+    $('#qualaproveitamento').val("");
+    $('#manejo').val("");
+    $('#agua').val("");
+    $('#racao-comercial').val("");
+    $('#qualracao').val("");
+    $('#racaoespecial').val("");
+    $('#proc2').prop('checked', false);
+    $('#proc3').prop('checked', false);
+    $('#proc4').prop('checked', false);
+    $('#proc5').prop('checked', false);
+    $('#proc1').prop('checked', false);
+}
+
+function editarModeloAnimal(id) {
+
+    $.ajax({
+        url: $BASE_URL + 'projeto/getEspecieID',
+        type: 'POST',
+        dataType: 'html',
+        data: ({
+            'id': id,
+        })
+
+    }).done(function (data) {
+
+        var obj = JSON.parse(data);
+        obj.forEach(function (o, index) {
+            $('#id_modelo_animal').val(o.id_modelo_animal);
+            $('#especie').val(o.id_especie).selectpicker('refresh');
+            $('#linhagem').val(o.linhagem);
+            $('#idade').val(o.idade);
+            $('#peso').val(o.peso);
+            $('#animais-por-grupo').val(o.num_animais_grupo);
+            $('#num-grupos').val(o.num_grupos);
+            $('#qtdM').val(o.qtd_mas);
+            $('#qtdF').val(o.qtd_fem);
+
+            $p = o.procedencia.split(", ");
+
+            for ($i = 0; $i < $p.length; $i++) {
+                if ($p[$i] == "Biotério de Criação") {
+                    $('#proc1').prop('checked', true);
+                }
+                if ($p[$i] == "Estabelecimentos comerciais") {
+                    $('#proc2').prop('checked', true);
+                }
+                if ($p[$i] == "Animal selvagem") {
+                    $('#proc3').prop('checked', true);
+                }
+                if ($p[$i] == "Animal doméstico") {
+                    $('#proc4').prop('checked', true);
+                }
+                if ($p[$i] == "Outros") {
+                    $('#proc5').prop('checked', true);
+                }
+            }
+
+            $('#criterio').val(o.criterio);
+            //FALTA PROCEDENCIA
+            $('#sisbio').val(o.num_sisbio);
+            $('#captura').val(o.metodo_captura);
+            $('#qualprocedimento').val(o.procedencia_outras);
+            $('#numctnbio').val(o.num_ctnbio);
+
+            if (o.gen_modificado == "s") {
+                $('#modificado').attr("checked", true);
+                $('#bloco-qual-notificacao').attr("hidden", false);
+            }
+
+            $('#aproveitamento').val(o.aprv_aniamais).selectpicker('refresh');
+            $('#qualaproveitamento').val(o.aprv_animais_como);
+            $('#manejo').val(o.manejo_animais);
+            $('#agua').val(o.tipo_agua).selectpicker('refresh');
+            $('#racao-comercial').val(o.racao_comercia).selectpicker('refresh');
+            $('#qualracao').val(o.qual_racao);
+            $('#racaoespecial').val(o.racao_especial);
+        })
+    });
+}
+
+
+
+
 //TABELA ESPECIES
 function criaTabelaEspecies() {
     if (($("#tabela-especies")).length) {
         $('#tabela-especies').css('width', '100%');
         var tabelaEspecies = $('#tabela-especies').DataTable({
+
+            destroy: true,
             "ajax": {
 
                 url: $BASE_URL + 'projeto/getModeloAnimal/',
@@ -904,11 +1000,40 @@ function criaTabelaEspecies() {
     }
 }
 
+function excluirModeloAnimal($id) {
+    bootbox.confirm({
+        message: "Tem certeza que deseja excluir esta espécie?",
+        buttons: {
+            confirm: {
+                label: 'Sim',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'Não',
+                className: 'btn-danger enviar'
+            }
+        },
+        callback: function (result) {
+            if (result == true) {
 
-function editarModeloAnimal(id){
-        
+                $.ajax({
+                    url: $BASE_URL + 'projeto/excluirExpecie',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: ({
+                        'id': $id,
+                    })
+
+                }).done(function (data) {
+                    if (data == true) {
+                        notify("Excluído com sucesso!", "success");
+                        criaTabelaEspecies();
+                    }
+                });
+            }
+        }
+    });
 }
-
 
 $('#img-categoria').on('change', function () {
 

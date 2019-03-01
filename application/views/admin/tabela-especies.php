@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <div class="card-body col-md-12" id="bloco-tabela-especies">
                     <button class="btn btn-info offset-md-1 col-md-3" hidden="" id="atualizar-tabela-especies"><i class="fa fa-refresh"></i> Atualizar Dados</button>
-                    <button class="btn btn-success offset-md-4 col-md-4" data-toggle="modal" data-target="#modal-add-animal-experimental"><i class="fa fa-plus"></i> Adicionar nova espécie</button>
+                    <button class="btn btn-success offset-md-4 col-md-4" data-toggle="modal" data-target="#modal-add-animal-experimental" id="add-especie"><i class="fa fa-plus"></i> Adicionar nova espécie</button>
                     <div class="align-items-md-stretch col-md-12 tabelas">
                         <table id="tabela-especies" class="table-hover table-action col-md-12">
                             <thead>

@@ -145,10 +145,17 @@ class Projeto extends CI_Controller {
         $data['racao_especial'] = $this->input->post('racaoEspecial');
         $data['procedencia'] = $this->input->post('procedencia');
         $data['id_pessoa'] = $this->session->userdata('usuario')->id_pessoa;
-        $data['dt_cadastro'] = date('Y-m-d');
+
         $data['dt_update'] = date('Y-m-d');
 
-        echo $this->projeto->salvarAnimalExperimental($data);
+        $id_modelo_animal = $this->input->post('id_modelo_animal');
+
+        if ($id_modelo_animal != "n") {
+            echo $this->projeto->salvarEdicaoAnimalExperimental($data, $id_modelo_animal);
+        } else {
+            $data['dt_cadastro'] = date('Y-m-d');
+            echo $this->projeto->salvarAnimalExperimental($data);
+        }
     }
 
     public function getModeloAnimal() {
@@ -168,10 +175,10 @@ class Projeto extends CI_Controller {
                 data_br($r->dt_cadastro),
                 $r->opcoes = "<div class='col-md-12'>
                     <button class='btn btn-info col-md-5'
-                    onclick=\"editarModeloAnimal('$r->id_modelo_animal');\"><i class='fa fa-close'></i> Editar</button>
+                    onclick=\"editarModeloAnimal('$r->id_modelo_animal');\" data-toggle='modal' data-target='#modal-add-animal-experimental'><i class='fa fa-close'></i> Editar</button>
                     
                     <button class='btn btn-danger col-md-5'
-                    onclick=\"excluirProjeto('$r->id_modelo_animal');\"><i class='fa fa-close'></i> Excluir</button></div>
+                    onclick=\"excluirModeloAnimal('$r->id_modelo_animal');\" ><i class='fa fa-close'></i> Excluir</button></div>
 ",
             );
         }
@@ -183,6 +190,17 @@ class Projeto extends CI_Controller {
         );
         echo json_encode($output);
         exit();
+    }
+
+    public function excluirExpecie() {
+        $id = $this->input->post('id');
+        echo $this->projeto->excluirAnimal($id);
+    }
+
+    public function getEspecieID() {
+        $id = $this->input->post('id');
+        $data['especie'] = $this->projeto->getEspecieID($id);
+        echo json_encode($data['especie']);
     }
 
     public function salvarImagem() {

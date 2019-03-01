@@ -92,7 +92,7 @@
 
                         <div class="col-md-4">
                             <input type="checkbox" id="proc2">
-                            <label for="proc2">Estabelecimentos comerciais*</label>
+                            <label for="proc2">Estabelecimentos comerciais</label>
                         </div> 
 
                         <div class="col-md-4">
@@ -121,6 +121,8 @@
                     <label>Métodos de Captura : </label>
                     <input type="text" class="form-control" id="captura">
                 </div>
+      <input type="hidden" id="editando" value="n">
+      <input type="hidden" id="id_modelo_animal" value="">
 
                 <div class="form-group col-md-12" hidden="" id="outro-procedimento-bloco">
                     <label>Qual?: </label>
