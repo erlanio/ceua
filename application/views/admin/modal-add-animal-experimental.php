@@ -71,7 +71,7 @@
 
 
                     </div>
-                    
+
                 </form>
                 <hr>
 
@@ -80,7 +80,7 @@
                     <input type="text" class="form-control" id="criterio">
                 </div>
 
-      <hr>
+                <hr>
                 <div class="form-group col-md-12">
                     <label>Procedência: </label>
 
@@ -121,8 +121,8 @@
                     <label>Métodos de Captura : </label>
                     <input type="text" class="form-control" id="captura">
                 </div>
-      <input type="hidden" id="editando" value="n">
-      <input type="hidden" id="id_modelo_animal" value="">
+                <input type="hidden" id="editando" value="n">
+                <input type="hidden" id="id_modelo_animal" value="">
 
                 <div class="form-group col-md-12" hidden="" id="outro-procedimento-bloco">
                     <label>Qual?: </label>
@@ -141,7 +141,7 @@
                         </div>
                     </div>
                 </div>
-      <hr>
+                <hr>
                 <div class="col-md-12 row">
                     <div class="form-group col-md-4" id="select-especie">
                         <label>Aproveitamento dos Animais:</label>
@@ -156,7 +156,7 @@
                         <input type="text" class="form-control" id="qualaproveitamento" placeholder="Como">
                     </div>
                 </div>
-      <hr>
+                <hr>
                 <div class="col-md-12 row">
                     <div class="col-md-12">
                         <label>Número de Animais/Parcela Experimental (Gaiola, Viveiro, Aquário, etc.) Descrever o manejo (ambiente, forração, Lotação - Número de animais/área, Exaustão do ar: sim ou não, Local onde será mantido o animal etc.):</label>
@@ -164,7 +164,7 @@
 
                     </div>
                 </div><br>
-      <hr>
+                <hr>
                 <div class="row col-md-12">
                     <div class="form-group col-md-2">
                         <label>Água:</label>
@@ -188,14 +188,14 @@
                         <label>Qual:</label>
                         <input type="text" class="form-control" id="qualracao">
                     </div>
-                    
+
                     <div class="col-md-7" id="racao-especial-bloco" hidden="">
                         <label>Especial:</label>
                         <input type="text" class="form-control" id="racaoespecial">
                     </div>
-                    
+
                     <button class="btn btn-success offset-md-4 col-md-4" onclick="salvarAnimal()">Salvar</button>
-                    
+
                 </div>
 
             </div>

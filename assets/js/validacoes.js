@@ -622,9 +622,223 @@ $(document).ready(function () {
     })
 
 
+    $('#select-restricao-alimentar').change(function () {
+        restricao = $('#select-restricao-alimentar').val();
+
+        if (restricao == "s") {
+            $('#bloco-select-restricao-alimentar').removeClass("col-md-12");
+            $('#bloco-select-restricao-alimentar').addClass("col-md-6");
+            $('#bloco-duracao-alimentar').attr("hidden", false);
+        } else {
+            $('#bloco-select-restricao-alimentar').addClass("col-md-12");
+            $('#bloco-duracao-alimentar').attr("hidden", true);
+        }
+    })
+
+    $('#select-restricao-hidrica').change(function () {
+        restricao = $('#select-restricao-hidrica').val();
+
+        if (restricao == "s") {
+            $('#bloco-select-restricao-hidrica').removeClass("col-md-12");
+            $('#bloco-select-restricao-hidrica').addClass("col-md-6");
+            $('#bloco-duracao-hidrica').attr("hidden", false);
+        } else {
+            $('#bloco-select-restricao-hidrica').addClass("col-md-12");
+            $('#bloco-duracao-hidrica').attr("hidden", true);
+        }
+    })
+
+    $('#select-imobilizacao').change(function () {
+        restricao = $('#select-imobilizacao').val();
+
+        if (restricao == "s") {
+            $('#bloco-select-imobilizacao').removeClass("col-md-12");
+            $('#bloco-select-imobilizacao').addClass("col-md-6");
+            $('#bloco-imobilizacao').attr("hidden", false);
+        } else {
+            $('#bloco-select-imobilizacao').addClass("col-md-12");
+            $('#bloco-como-imobilizacao').attr("hidden", true);
+        }
+    })
+
+    $('#select-lesao').change(function () {
+        restricao = $('#select-lesao').val();
+
+        if (restricao == "s") {
+            $('#bloco-select-lesao').removeClass("col-md-12");
+            $('#bloco-select-lesao').addClass("col-md-6");
+            $('#bloco-lesao').attr("hidden", false);
+        } else {
+            $('#bloco-select-lesao').addClass("col-md-12");
+            $('#bloco-como-lesao').attr("hidden", true);
+        }
+    })
+
+    $('#select-cirurgia').change(function () {
+        restricao = $('#select-cirurgia').val();
+
+        if (restricao == "s") {
+            $('#bloco-select-cirurgia').removeClass("col-md-12");
+            $('#bloco-select-cirurgia').addClass("col-md-6");
+            $('#bloco-cirurgia').attr("hidden", false);
+        } else {
+            $('#bloco-select-cirurgia').addClass("col-md-12");
+            $('#bloco-como-cirurgia').attr("hidden", true);
+        }
+    })
+
+    $('#select-anestesia').change(function () {
+        restricao = $('#select-anestesia').val();
+
+        if (restricao == "s") {
+            $('#bloco-select-anestesia').removeClass("col-md-12");
+            $('#bloco-select-anestesia').addClass("col-md-6");
+            $('#bloco-anestesia').attr("hidden", false);
+        } else {
+            $('#bloco-select-anestesia').addClass("col-md-12");
+            $('#bloco-como-anestesia').attr("hidden", true);
+        }
+    })
+    
+    $('#select-recuperacao').change(function () {
+        restricao = $('#select-recuperacao').val();
+
+        if (restricao == "s") {
+            $('#bloco-select-recuperacao').removeClass("col-md-12");
+            $('#bloco-select-recuperacao').addClass("col-md-6");
+            $('#bloco-recuperacao').attr("hidden", false);
+        } else {
+            $('#bloco-select-recuperacao').addClass("col-md-12");
+            $('#bloco-recuperacao').attr("hidden", true);
+        }
+    })
+    
+     $('#select-extracao').change(function () {
+        restricao = $('#select-extracao').val();
+
+        if (restricao == "s") {
+            $('#bloco-extracao').attr("hidden", false);
+        } else {
+
+            $('#bloco-extracao').attr("hidden", true);
+        }
+    })
+//QUANDO ESTE CÓDIGO FOI CRIADO SEMENTE EU DEUS SABIAMOS O QUE ESTAVÁMOS FAZENDO, HOJE, SÓ DEUS SABE!
+    $('#salvar-medicamento').click(function () {
+
+        $.ajax({
+            url: $BASE_URL + 'projeto/salvarMedicamento',
+            type: 'POST',
+            dataType: 'html',
+            data: ({
+                'id_projeto': $('#id_projeto').val(),
+                'farmaco': $('#farmaco').val(),
+                'dose': $('#dose').val(),
+                'frequencia': $('#frequencia').val(),
+                'duracao': $('#duracao').val(),
+                'via': $('#via').val(),
+                'id_medicamento': $('#id_medicamento').val(),
+            })
+
+        }).done(function (data) {
+            if (data == true) {
+                $('#cancel-medicamento').click();
+                criaTabelaMedicamentos();
+                notify("Salvo com sucesso", "success");
+                $('#farmaco').val("");
+                $('#dose').val("");
+                $('#frequencia').val("");
+                $('#duracao').val("");
+                $('#via').val("");
+                $('#id_medicamento').val("")
+            }
+        });
+    })
+    criaTabelaMedicamentos();
+
+    $('#add-medicamento').click(function () {
+        $('#form-medicamento').attr("hidden", false);
+        $('#bloco-tabela-medicamentos').attr("hidden", true);
+    })
+
+    $('#cancel-medicamento').click(function () {
+        $('#form-medicamento').attr("hidden", true);
+        $('#bloco-tabela-medicamentos').attr("hidden", false);
+        $('#farmaco').val("");
+        $('#dose').val("");
+        $('#frequencia').val("");
+        $('#duracao').val("");
+        $('#via').val("");
+        $('#id_medicamento').val("");
+    })
+
+
 });
 
 // Fim dO READY
+
+function excluirMedicamento(id) {
+    bootbox.confirm({
+        message: "Tem certeza que deseja deletar este Medicamento?",
+        buttons: {
+            confirm: {
+                label: 'Sim',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'Não',
+                className: 'btn-danger enviar'
+            }
+        },
+        callback: function (result) {
+            if (result == true) {
+
+                $.ajax({
+                    url: $BASE_URL + 'projeto/excluirMedicamento',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: ({
+                        'id': id,
+                    })
+
+                }).done(function (data) {
+                    console.log(data);
+                    if (data == true) {
+                        criaTabelaMedicamentos();
+                        notify("Medicamento excluido com sucesso!", 'success');
+                    } else {
+                        notify("Erro ao tentar excluir!<br>Tente novamente!", "danger");
+                    }
+
+                });
+            }
+        }
+    });
+
+}
+
+function editarMedicamento(id) {
+    $.ajax({
+        url: $BASE_URL + 'projeto/getMedicamentoID',
+        type: 'POST',
+        dataType: 'html',
+        data: ({
+            'id': id,
+        })
+
+    }).done(function (data) {
+        var obj = JSON.parse(data);
+        obj.forEach(function (o, index) {
+            $('#id_medicamento').val(o.id_medicamento);
+            $('#farmaco').val(o.farmaco);
+            $('#dose').val(o.dose);
+            $('#frequencia').val(o.frequencia);
+            $('#duracao').val(o.duracao);
+            $('#via').val(o.via);
+            $('#add-medicamento').click();
+        });
+    })
+}
 
 function deletarMembro(id) {
 
@@ -1034,6 +1248,73 @@ function excluirModeloAnimal($id) {
         }
     });
 }
+
+
+
+//TABELA ESPECIES
+function criaTabelaMedicamentos() {
+    if (($("#tabela-medicamentos")).length) {
+        $('#tabela-medicamentos').css('width', '100%');
+        var tabelaEspecies = $('#tabela-medicamentos').DataTable({
+
+            destroy: true,
+            "ajax": {
+
+                url: $BASE_URL + 'projeto/getMedicamentos/',
+                type: 'GET',
+                "data": {
+                    "id_projeto": $('#id_projeto').val()
+                }
+
+            },
+            "language": {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "Último"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                }
+            }
+
+
+
+        });
+
+        tabelaEspecies.on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            } else {
+                tabelaEspecies.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+
+        $('#atualizar-tabela-medicamentos').click(function () {
+            tabelaEspecies.ajax.reload();
+        })
+    }
+}
+
+
+
+
+
 
 $('#img-categoria').on('change', function () {
 

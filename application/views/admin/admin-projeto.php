@@ -17,11 +17,11 @@
                     <p class="lead">Informações sobre o Modelo Animal Experimental</p>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="box box-dashboard">
+            <div class="col-md-3" data-toggle="modal" data-target="#modal-procedimentos">
+                <div class="box  box-dashboard pointer">
                     <i class="fa fa-user-o"></i>
-                    <h3>245</h3>
-                    <p class="lead">User registered</p>
+                    <h3></h3>
+                    <p class="lead">PROCEDIMENTOS EXPERIMENTAIS</p>
                 </div>
             </div>
             <div class="col-md-3">

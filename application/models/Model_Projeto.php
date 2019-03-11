@@ -117,5 +117,29 @@ class Model_Projeto extends CI_Model {
     public function getEspecieID($id) {
         return $this->db->query("select * from modelo_animal as ma join especies as es on es.id_especie = ma.id_especie join projeto as p on p.id_projeto = ma.id_projeto join pessoa as pes on pes.id_pessoa = ma.id_pessoa where ma.id_modelo_animal = $id")->result();
     }
+    
+    public function salvarMedicamento($data, $id_medicamento = null) {
+        if($id_medicamento == null){
+            return $this->db->insert("medicamentos", $data);
+        }else{
+            $this->db->where('id_medicamento', $id_medicamento);
+            return $this->db->update("medicamentos", $data);
+        }
+        
+    }
+    
+    public function getMedicamentos($id) {
+        $this->db->where('id_projeto', $id);
+        return $this->db->get('medicamentos')->result();
+    }
+    
+    public function excluirMedicamento($id) {
+        return $this->db->query("delete from medicamentos where id_medicamento = $id");
+    }
+    
+    public function getMedicamentoID($id) {
+        $this->db->where('id_medicamento', $id);
+        return $this->db->get('medicamentos')->result();
+    }
 
 }

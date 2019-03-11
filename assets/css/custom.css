@@ -610,5 +610,8 @@ body {background-color: #2a2b3d}
 }
 
 .box-dashboard{
+    text-transform: uppercase;
+    min-height: 120px;
+    max-height: 120px;
     background-color: #17a2b8;
 }

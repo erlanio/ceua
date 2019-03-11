@@ -118,6 +118,8 @@ class Projeto extends CI_Controller {
 
         $this->load->view('admin/tabela-especies');
         $this->load->view('admin/modal-add-animal-experimental', $data);
+        $this->load->view('admin/modal-procedimentos', $data);
+        $this->load->view('admin/modal-add-medicamentos');
     }
 
     public function salvarAnimalExperimental() {
@@ -201,6 +203,62 @@ class Projeto extends CI_Controller {
         $id = $this->input->post('id');
         $data['especie'] = $this->projeto->getEspecieID($id);
         echo json_encode($data['especie']);
+    }
+
+    public function salvarMedicamento() {
+        $data['id_projeto'] = $this->input->post('id_projeto');
+        $data['farmaco'] = $this->input->post('farmaco');
+        $data['dose'] = $this->input->post('dose');
+        $data['frequencia'] = $this->input->post('frequencia');
+        $data['duracao'] = $this->input->post('duracao');
+        $data['via'] = $this->input->post('via');
+        
+        $id_medicamento = $this->input->post('id_medicamento');
+        
+        echo $this->projeto->salvarMedicamento($data, $id_medicamento);
+    }
+
+    public function getMedicamentos() {
+        $id = $this->input->get('id_projeto');
+        $data2['medicamento'] = $this->projeto->getMedicamentos($id);
+        // Datatables Variables
+        $draw = intval($this->input->get("draw"));
+        $start = intval($this->input->get("start"));
+        $length = intval($this->input->get("length"));
+        $data = array();
+        foreach ($data2['medicamento'] as $r) {
+            $data[] = array(
+                $r->id_medicamento,
+                $r->farmaco,
+                $r->dose,            
+                $r->opcoes = "<div class='col-md-12'>
+                    <button class='btn btn-info col-md-5'
+                    onclick=\"editarMedicamento('$r->id_medicamento');\"><i class='fa fa-close'></i> Editar</button>
+                    
+                    <button class='btn btn-danger col-md-5'
+                    onclick=\"excluirMedicamento('$r->id_medicamento');\" ><i class='fa fa-close'></i> Excluir</button></div>
+",
+            );
+        }
+        $output = array(
+            "draw" => $draw,
+            "recordsTotal" => "",
+            "recordsFiltered" => "",
+            "data" => $data
+        );
+        echo json_encode($output);
+        exit();
+    }
+    
+    public function excluirMedicamento() {
+        $id = $this->input->post('id');       
+        echo $this->projeto->excluirMedicamento($id);
+    }
+    
+    public function getMedicamentoID() {
+        $id = $this->input->post('id');
+        $data['medicamento'] = $this->projeto->getMedicamentoID($id);
+        echo json_encode($data['medicamento']);
     }
 
     public function salvarImagem() {
