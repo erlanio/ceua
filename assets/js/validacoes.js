@@ -89,8 +89,6 @@ $(document).ready(function () {
     })
 
 
-
-
     $("#finalidade").change(function () {
 
         finalidade = $('#finalidade').val();
@@ -699,7 +697,7 @@ $(document).ready(function () {
             $('#bloco-como-anestesia').attr("hidden", true);
         }
     })
-    
+
     $('#select-recuperacao').change(function () {
         restricao = $('#select-recuperacao').val();
 
@@ -712,8 +710,8 @@ $(document).ready(function () {
             $('#bloco-recuperacao').attr("hidden", true);
         }
     })
-    
-     $('#select-extracao').change(function () {
+
+    $('#select-extracao').change(function () {
         restricao = $('#select-extracao').val();
 
         if (restricao == "s") {
@@ -723,7 +721,19 @@ $(document).ready(function () {
             $('#bloco-extracao').attr("hidden", true);
         }
     })
-//QUANDO ESTE CÓDIGO FOI CRIADO SEMENTE EU DEUS SABIAMOS O QUE ESTAVÁMOS FAZENDO, HOJE, SÓ DEUS SABE!
+
+    $('#exp4').click(function () {
+        if ($("#exp4").is(':checked')) {
+            $('#outros-especifico').attr("hidden", false);
+        } else {
+            $('#outros-especifico').attr("hidden", true);
+        }
+    })
+
+
+
+
+
     $('#salvar-medicamento').click(function () {
 
         $.ajax({
@@ -773,6 +783,71 @@ $(document).ready(function () {
     })
 
 
+    $('#buscar-procedimentos').click(function () {
+
+        $.ajax({
+            url: $BASE_URL + 'projeto/buscarProcedimento',
+            type: 'POST',
+            dataType: 'html',
+            data: ({
+                'id_projeto': $('#id_projeto').val(),
+            })
+
+        }).done(function (data) {
+            
+            var obj = JSON.parse(data);
+            obj.forEach(function (o, index) {
+                $('#select-restricao-alimentar').val(o.res_alimentar).selectpicker('refresh');
+                $('#select-restricao-alimentar').change();
+                $('#duracao-alimentar').val(o.desc_res_alimentar);
+                $('#select-restricao-hidrica').val(o.res_hidrica).selectpicker('refresh');
+                $('#select-restricao-hidrica').change();
+                $('#duracao-hidrica').val(o.desc_res_hidrica);
+                $('#select-imobilizacao').val(o.imobilizacao).selectpicker('refresh');
+                $('#select-imobilizacao').change();
+                $('#como-imobilizacao').val(o.desc_imobilizacao);
+                $('#select-lesao').val(o.lesao).selectpicker('refresh');
+                $('#select-lesao').change();
+                $('#como-lesao').val(o.desc_lesao);
+                $('#select-cirurgia').val(o.cirurgia).selectpicker('refresh');
+                $('#select-cirurgia').change();
+                $('#como-cirurgia').val(o.desc_cirurgia);
+                $('#select-anestesia').val(o.anestesia).selectpicker('refresh');
+                $('#select-anestesia').change();
+                $('#como-anestesia').val(o.desc_anestesia);
+                $('#procedimentos').val(o.procedimentos);
+                $('#select-recuperacao').val(o.rec_pos_cirurgia).selectpicker('refresh');
+                $('#select-recuperacao').change();
+                $('#como-recuperacao').val(o.desc_cirurgia);
+                $('#descricao-recuperacao').val(o.outros_procedimentos);
+                $('#select-extracao').val(o.ext_orgaos).selectpicker('refresh');
+                $('#select-extracao').change();
+                $('#como-extracao').val(o.desc_ext_orgaos);
+                $('#outros-especifico').val(o.outro_experimento);
+                $('#id_procedimento').val(o.id_procedimento);
+                $('#btn-procedimento').html("Salvar Alterações");
+                $p = o.tipo_experimento.split(", ");
+
+                for ($i = 0; $i < $p.length; $i++) {
+                    if ($p[$i] == "Dor") {
+                        $('#exp1').prop('checked', true);
+                    }
+                    if ($p[$i] == "Estresse") {
+                        $('#exp2').prop('checked', true);
+                    }
+                    if ($p[$i] == "Anorexia") {
+                        $('#exp3').prop('checked', true);
+                    }
+                    if ($p[$i] == "Outros") {
+                        $('#exp4').prop('checked', true);
+                    }
+                }
+            });
+
+        });
+    })
+
+
 });
 
 // Fim dO READY
@@ -802,7 +877,7 @@ function excluirMedicamento(id) {
                     })
 
                 }).done(function (data) {
-                    console.log(data);
+
                     if (data == true) {
                         criaTabelaMedicamentos();
                         notify("Medicamento excluido com sucesso!", 'success');
@@ -1085,7 +1160,8 @@ function limparCamposAnimal() {
 }
 
 function editarModeloAnimal(id) {
-
+    // Quando eu escrevi isso, só Deus e eu sabíamos o que eu estava fazendo
+    // Agora só Deus sabe
     $.ajax({
         url: $BASE_URL + 'projeto/getEspecieID',
         type: 'POST',
@@ -1304,7 +1380,6 @@ function criaTabelaMedicamentos() {
             }
         });
 
-
         $('#atualizar-tabela-medicamentos').click(function () {
             tabelaEspecies.ajax.reload();
         })
@@ -1341,6 +1416,119 @@ $('#img-categoria').on('change', function () {
 
 });
 
+
+function salvarProcedimentos() {
+    $resAlimentar = $('#select-restricao-alimentar').val();
+    $duracaoAlimentar = $('#duracao-alimentar').val();
+    $resHidrica = $('#select-restricao-hidrica').val();
+    $duracaoHidrica = $('#duracao-hidrica').val();
+    $imobilizacao = $('#select-imobilizacao').val();
+    $descImobilizacao = $('#como-imobilizacao').val();
+    $lesao = $('#select-lesao').val();
+    $comoLesao = $('#como-lesao').val();
+    $cirurgua = $('#select-cirurgia').val();
+    $comoCirurgia = $('#como-cirurgia').val();
+    $anestesia = $('#select-anestesia').val();
+    $comoAnestesia = $('#como-anestesia').val();
+    $procedimentos = $('#procedimentos').val();
+    $recuperacao = $('#select-recuperacao').val();
+    $comoRecuperacao = $('#como-recuperacao').val();
+    $outrosProcedimentos = $('#descricao-recuperacao').val();
+    $extracao = $('#select-extracao').val();
+    $comoExtracao = $('#como-extracao').val();
+    $outroEspecifico = $('#outros-especifico').val();
+    $id_projeto = $('#id_projeto').val();
+    $id_procedimento = $('#id_procedimento').val();
+    $especifico = "";
+    if ($("#exp1").is(':checked')) {
+        $especifico += "Dor";
+    }
+    if ($("#exp2").is(':checked')) {
+
+        if ($especifico == "") {
+            $especifico = $especifico + "Estresse";
+        } else {
+            $especifico = $especifico + ", Estresse";
+        }
+
+    }
+
+    if ($("#exp3").is(':checked')) {
+
+        if ($especifico == "") {
+            $especifico = $especifico + "Anorexia";
+        } else {
+            $especifico = $especifico + ", Anorexia";
+        }
+    }
+
+    $.ajax({
+        url: $BASE_URL + 'projeto/salvarProcedimentos',
+        type: 'POST',
+        dataType: 'html',
+        data: ({
+            'resAlimentar': $resAlimentar,
+            'desc_alimentar': $duracaoAlimentar,
+            'resHidrica': $resHidrica,
+            'descHidrica': $duracaoHidrica,
+            'imobilizacao': $imobilizacao,
+            'descImobilizacao': $descImobilizacao,
+            'lesao': $lesao,
+            'comoLesao': $comoLesao,
+            'cirurgia': $cirurgua,
+            'descCirurgia': $comoCirurgia,
+            'anestesia': $anestesia,
+            'descAnestesia': $comoAnestesia,
+            'procedimentos': $procedimentos,
+            'recuperacao': $recuperacao,
+            'descRecuperacao': $comoRecuperacao,
+            'outrosProcedimentos': $outrosProcedimentos,
+            'extracao': $extracao,
+            'descExrtacao': $comoExtracao,
+            'outroEspecifico': $outroEspecifico,
+            'especifico': $especifico,
+            'id_projeto': $id_projeto,
+            'id_procedimento': $id_procedimento,
+        })
+
+    }).done(function (data) {
+
+        if (data == true) {
+            $('#modal-procedimentos').modal('hide');
+            notify("Sucesso!", "success");
+        }
+
+    });
+
+
+}
+
+function limparProcedimentos() {
+    $('#select-restricao-alimentar').val("");
+    $('#duracao-alimentar').val("");
+    $('#select-restricao-hidrica').val("");
+    $('#duracao-hidrica').val("");
+    $('#select-imobilizacao').val("");
+    $('#como-imobilizacao').val("");
+    $('#select-lesao').val("");
+    $('#como-lesao').val("");
+    $('#select-cirurgia').val("");
+    $('#como-cirurgia').val("");
+    $('#select-anestesia').val("");
+    $('#como-anestesia').val("");
+    $('#procedimentos').val("");
+    $('#select-recuperacao').val("");
+    $('#como-recuperacao').val("");
+    $('#descricao-recuperacao').val("");
+    $('#select-extracao').val("");
+    $('#como-extracao').val("");
+    $('#outros-especifico').val("");
+    $('#id_procedimento').val("");
+    $("#exp1").prop("checked", false);
+    $("#exp2").prop("checked", false);
+    $("#exp3").prop("checked", false);
+    $("#exp4").prop("checked", false);
+}
 
 function notify($mensagem, $tipo) {
     $.notify({

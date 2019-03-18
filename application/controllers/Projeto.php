@@ -212,9 +212,9 @@ class Projeto extends CI_Controller {
         $data['frequencia'] = $this->input->post('frequencia');
         $data['duracao'] = $this->input->post('duracao');
         $data['via'] = $this->input->post('via');
-        
+
         $id_medicamento = $this->input->post('id_medicamento');
-        
+
         echo $this->projeto->salvarMedicamento($data, $id_medicamento);
     }
 
@@ -230,7 +230,7 @@ class Projeto extends CI_Controller {
             $data[] = array(
                 $r->id_medicamento,
                 $r->farmaco,
-                $r->dose,            
+                $r->dose,
                 $r->opcoes = "<div class='col-md-12'>
                     <button class='btn btn-info col-md-5'
                     onclick=\"editarMedicamento('$r->id_medicamento');\"><i class='fa fa-close'></i> Editar</button>
@@ -249,12 +249,53 @@ class Projeto extends CI_Controller {
         echo json_encode($output);
         exit();
     }
-    
-    public function excluirMedicamento() {
-        $id = $this->input->post('id');       
-        echo $this->projeto->excluirMedicamento($id);
+
+    public function salvarProcedimentos() {
+
+        $data['res_alimentar'] = $this->input->post('resAlimentar');
+        $data['desc_res_alimentar'] = $this->input->post('desc_alimentar');
+        $data['res_hidrica'] = $this->input->post('resHidrica');
+        $data['desc_res_hidrica'] = $this->input->post('descHidrica');
+        $data['imobilizacao'] = $this->input->post('imobilizacao');
+        $data['desc_imobilizacao'] = $this->input->post('descImobilizacao');
+        $data['lesao'] = $this->input->post('lesao');
+        $data['desc_lesao'] = $this->input->post('comoLesao');
+        $data['cirurgia'] = $this->input->post('cirurgia');
+        $data['desc_cirurgia'] = $this->input->post('descCirurgia');
+        $data['anestesia'] = $this->input->post('anestesia');
+        $data['desc_anestesia'] = $this->input->post('descAnestesia');
+        $data['procedimentos'] = $this->input->post('procedimentos');
+        $data['rec_pos_cirurgia'] = $this->input->post('recuperacao');
+        $data['desc_pos_cirurgia'] = $this->input->post('descRecuperacao');
+        $data['outros_procedimentos'] = $this->input->post('outrosProcedimentos');
+        $data['ext_orgaos'] = $this->input->post('extracao');
+        $data['desc_ext_orgaos'] = $this->input->post('descExrtacao');
+        $data['outro_experimento'] = $this->input->post('outroEspecifico');
+        $data['tipo_experimento'] = $this->input->post('especifico');
+        $data['id_projeto'] = $this->input->post('id_projeto');
+        $data['id_pessoa'] = $this->session->userdata('usuario')->id_pessoa;
+        $id_procedimento = $this->input->post('id_procedimento');
+        if($id_procedimento == ""){
+            echo $this->projeto->salvarProcedimentos($data);
+        }else{
+            echo $this->projeto->updateProcedimento($data, $id_procedimento);
+        }
+        
+    }
+
+    public function buscarProcedimento() {
+        $id = $this->input->post('id_projeto');
+        
+        $data['procedimento'] = $this->projeto->buscarProcedimento($id);
+        
+        echo json_encode($data['procedimento']);
     }
     
+    public function excluirMedicamento() {
+        $id = $this->input->post('id');
+        echo $this->projeto->excluirMedicamento($id);
+    }
+
     public function getMedicamentoID() {
         $id = $this->input->post('id');
         $data['medicamento'] = $this->projeto->getMedicamentoID($id);

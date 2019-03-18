@@ -179,11 +179,15 @@
                             <label for="exp4">Outros </label>
                         </div>
 
-
                     </div>
+
+                    <input type="text" class="form-control"  hidden="" placeholder="Informe Outros" id="outros-especifico">
+
                 </div>
 
-                <button class="btn btn-success offset-md-4 col-md-4" onclick="salvarProcedimentos()">Salvar</button>
+                <input type="text" id="id_procedimento"/>
+
+                <button class="btn btn-success offset-md-4 col-md-4" id="btn-procedimento" onclick="salvarProcedimentos()">Salvar</button>
 
 
             </div>

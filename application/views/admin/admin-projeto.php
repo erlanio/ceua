@@ -17,7 +17,7 @@
                     <p class="lead">Informações sobre o Modelo Animal Experimental</p>
                 </div>
             </div>
-            <div class="col-md-3" data-toggle="modal" data-target="#modal-procedimentos">
+            <div class="col-md-3" id="buscar-procedimentos" data-toggle="modal" data-target="#modal-procedimentos">
                 <div class="box  box-dashboard pointer">
                     <i class="fa fa-user-o"></i>
                     <h3></h3>
